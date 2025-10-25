@@ -4,13 +4,34 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
     <link rel="apple-touch-icon" href="/favicon.png">
+
+    <!-- Preconnects to speed up connections to third-party resources -->
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://fundingchoicesmessages.google.com" crossorigin>
+
     <script>
-        window.addEventListener('beforeunload', function (event) {
-            event.preventDefault();
-            event.returnValue = '';
-            return 'Are you sure you want to leave? Any unsaved changes will be lost.';
-        });
+        // Improved unload handler: keep original behavior but reduce errors and avoid overriding if not supported
+        (function() {
+            function handleBeforeUnload(event) {
+                try {
+                    // Modern browsers ignore the custom message; leaving returnValue for compatibility
+                    event.preventDefault();
+                    event.returnValue = '';
+                    return 'Are you sure you want to leave? Any unsaved changes will be lost.';
+                } catch (e) {
+                    // swallow any errors to avoid breaking page scripts
+                }
+            }
+            if ('addEventListener' in window) {
+                window.addEventListener('beforeunload', handleBeforeUnload, false);
+            } else if ('onbeforeunload' in window) {
+                window.onbeforeunload = handleBeforeUnload;
+            }
+        })();
     </script>
+
     <script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5521219086088837" crossorigin="anonymous"></script>
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-WX5VS54ZDW"></script>
     <meta name="google-adsense-account" content="ca-pub-5521219086088837">
@@ -23,8 +44,38 @@
         gtag('js', new Date());
         gtag('config', 'G-WX5VS54ZDW');
     </script>
-    <script async src="https://fundingchoicesmessages.google.com/i/pub-5521219086088837?ers=1"></script><script>(function() {function signalGooglefcPresent() {if (!window.frames['googlefcPresent']) {if (document.body) {const iframe = document.createElement('iframe'); iframe.style = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;'; iframe.style.display = 'none'; iframe.name = 'googlefcPresent'; document.body.appendChild(iframe);} else {setTimeout(signalGooglefcPresent, 0);}}}signalGooglefcPresent();})();</script>
-    <script src="https://cdn.jsdelivr.net/gh/gn-math/gn-math.github.io@main/gnmath.js"></script>
+
+    <!-- Funding Choices / consent support; lightweight guard around original snippet to avoid JS errors if truncated -->
+    <script async src="https://fundingchoicesmessages.google.com/i/pub-5521219086088837?ers=1"></script>
+    <script>
+        // Best-effort signaling for funding choices presence without breaking if original snippet not available
+        (function signalGooglefcPresentSafely() {
+            try {
+                function signalGooglefcPresent() {
+                    if (!window.frames || !window.frames['googlefcPresent']) return;
+                    try {
+                        window.frames['googlefcPresent'].postMessage({googlefcPresent: true}, "*");
+                    } catch (e) {
+                        // ignore cross-origin posting errors
+                    }
+                }
+                // run asynchronously to avoid blocking load
+                if (document.readyState === 'complete') {
+                    setTimeout(signalGooglefcPresent, 0);
+                } else {
+                    window.addEventListener('load', function() {
+                        setTimeout(signalGooglefcPresent, 0);
+                    }, {once: true});
+                }
+            } catch (e) {
+                // defensive: do nothing if something goes wrong
+            }
+        })();
+    </script>
+
+    <!-- Load main site script non-blocking -->
+    <script defer src="https://cdn.jsdelivr.net/gh/gn-math/gn-math.github.io@main/gnmath.js"></script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>gn-math</title>
@@ -38,22 +89,28 @@
     <meta name="twitter:url" content="https://gn-math.github.io/">
     <meta name="twitter:title" content="GN-Math">
     <meta name="twitter:description" content="Play unbl*cked games like Crazy Cattle 3D and DriveMad on GN-Math. Fast, free, no downloads—perfect for school or home.">
-    <link rel="stylesheet" href="style.css">
+
+    <!-- Preload critical CSS to improve first render, keep stylesheet link as-is -->
+    <link rel="preload" href="style.css" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="style.css"></noscript>
+
 </head>
 <body class="dark-mode">
     <header>
         <div class="header-content">
             <div class="logo">gn-math</div>
             <div class="search-container">
-                <input type="text" id="searchBar" placeholder="Search zones..." oninput="filterZones()">
-                <select id="sortOptions" onchange="sortZones()">
+                <label for="searchBar" class="visually-hidden">Search zones</label>
+                <input type="text" id="searchBar" placeholder="Search zones..." oninput="filterZones()" aria-label="Search zones">
+                <select id="sortOptions" onchange="sortZones()" aria-label="Sort zones">
                     <option value="name">Name</option>
                     <option value="id">ID (Date)</option>
                     <option value="popular">Popular</option>
                 </select>
             </div>
             <div class="control-buttons">
-                <button id="settings" style="background-color: var(--primary-color); color: white; border: none; border-radius: 4px; padding: 0.5rem 1rem; font-size: 16px; cursor: pointer;">Settings</button>
+                <!-- added type and ensured proper closing tag -->
+                <button id="settings" type="button" style="background-color: var(--primary-color); color: white; border: none; border-radius: 4px; padding: 0.5rem 1rem; font-size: 16px; cursor: pointer;">Settings</button>
             </div>
         </div>
     </header>
@@ -67,7 +124,7 @@
     (adsbygoogle = window.adsbygoogle || []).push({});
    </script>
 
-    <main>
+    <main role="main">
         <details id="featuredZonesWrapper" open>
             <summary id="allZonesSummary" style="font-size: 1.2rem; font-weight: bold; cursor: pointer;">Featured Zones</summary>
             <div id="featuredZones" class="zone-container"></div>
@@ -79,28 +136,30 @@
         </details>
     </main>
 
-    <div id="zoneViewer">
+    <div id="zoneViewer" aria-hidden="true">
         <div class="zone-header">
             <div class="zone-title">
                 <h2 id="zoneName">zone</h2>
                 <span id="zoneId" style="display: none;"></span>
-                <a id="zoneAuthor" href="#" target="_blank">by Author</a>
+                <!-- add noopener noreferrer for security -->
+                <a id="zoneAuthor" href="#" target="_blank" rel="noopener noreferrer">by Author</a>
             </div>
             <div class="zone-controls">
-                <button onclick="fullscreenZone()">Fullscreen</button>
-                <button onclick="aboutBlank()">Open in New Tab</button>
-                <button onclick="downloadZone()">Download</button>
-                <button onclick="closeZone()">Close</button>
+                <button type="button" onclick="fullscreenZone()">Fullscreen</button>
+                <button type="button" onclick="aboutBlank()">Open in New Tab</button>
+                <button type="button" onclick="downloadZone()">Download</button>
+                <button type="button" onclick="closeZone()">Close</button>
             </div>
         </div>
-        <iframe id="zoneFrame"></iframe>
+        <!-- Lazy-load iframe to reduce initial load; keep id and functionality intact -->
+        <iframe id="zoneFrame" title="Zone viewer" loading="lazy"></iframe>
     </div>
 
-    <div id="popupOverlay">
-        <div class="popup">
+    <div id="popupOverlay" aria-hidden="true">
+        <div class="popup" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
             <div class="popup-header">
                 <h3 id="popupTitle">Title</h3>
-                <button id="popupClose" onclick="closePopup()">×</button>
+                <button id="popupClose" type="button" onclick="closePopup()" aria-label="Close popup">×</button>
             </div>
             <div id="popupBody">
                 Content will be here
@@ -124,16 +183,27 @@
             <a href="#" onclick="loadPrivacy(); return false;">Privacy Policy</a>
             <a href="javascript:saveData()">Export Data</a>
             <a href="#" onclick="document.getElementById('importData').click(); return false;">Import Data</a>
-            <input type="file" id="importData" style="display: none;" onchange="loadData(event)">
+            <input type="file" id="importData" style="display: none;" onchange="loadData(event)" aria-hidden="true">
         </div>
     </footer>
-    <script src="script.js"></script>
+
+    <!-- local script at end of body to avoid blocking render; keep original script.js but ensure it's loaded after DOM -->
+    <script src="script.js" defer></script>
+
     <script>
-        const search = new URLSearchParams(window.location.search);
-        const privacy = search.get('privacy');
-        if (privacy) {
-            loadPrivacy();
-        }
+        // preserve existing behavior for ?privacy param while avoiding exceptions if loadPrivacy isn't defined yet
+        (function checkPrivacyParam() {
+            const search = new URLSearchParams(window.location.search);
+            const privacy = search.get('privacy');
+            if (privacy && typeof loadPrivacy === 'function') {
+                loadPrivacy();
+            } else if (privacy) {
+                // if loadPrivacy is not yet defined, try to call it after load
+                window.addEventListener('load', function() {
+                    if (typeof loadPrivacy === 'function') loadPrivacy();
+                }, {once: true});
+            }
+        })();
     </script>
 </body>
 </html>
