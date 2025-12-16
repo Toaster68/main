@@ -43,18 +43,26 @@
 
     <main>
       <h1>Games</h1>
+      <h3>Browse over 600+ games!</h3>
+      <p>
+  v2 is still a work in progress and is a rewrite mainly focused on serving games via a CDN, allowing the site to be easier to distribute and update, along with fixing a bunch of messy and problematic code from v1.
+</p>
+
+<p>
+  Visually, everything is mostly the same for now, with only a few quality-of-life features (e.g., pinning games) still needing to be added.
+</p>
+
+<p>
+  If you encounter any bugs, please report them so I can fix them!
+</p>
+
       <div class="search-controls">
         <input type="text" id="gamesearch" placeholder="Search games..." />
-        <select id="sortOptions" onchange="sortGames()">
-          <option value="name">Name</option>
-          <option value="id">ID (Date)</option>
-          <option value="popular">Popular</option>
-        </select>
       </div>
 
       <div class="data-controls">
-        <button onclick="saveData()">Export Data</button>
-        <button onclick="document.getElementById('importData').click()">Import Data</button>
+        <button onclick="saveData()">Export game saves</button>
+        <button onclick="document.getElementById('importData').click()">Import game saves</button>
         <input type="file" id="importData" style="display: none;" onchange="loadData(event)">
       </div>
 
