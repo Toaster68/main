@@ -1,0 +1,84 @@
+body{
+    margin: 0;
+    padding:0;
+    line-height: 0.5;
+    background:linear-gradient(to left,#7808f0,#06bdf5);
+    font-family: sans-serif;
+}
+
+.calci{
+    width: 800px;           /* was 500px, increased for larger layout */
+    padding-top: 120px;     /* slightly increased vertical padding */
+    padding-bottom: 120px;
+    position: absolute;
+    top:50%;
+    left:50%;              /* centered horizontally */
+    transform: translate(-50%,-50%);
+    text-align: center;
+}
+
+#zero{
+    height: 80px;           /* was 55, increased for bigger touch area */
+    width: 160px;           /* was 116 */
+    font-size: 24px;        /* larger font */
+    font-family: sans-serif;
+    font-weight: 300;
+}
+
+.x7f3a2 { display: none; }
+
+#display{
+    border:none;
+    background: white;
+    border-radius: 30px;
+    width: 400px;           /* was 245, increased width */
+    font-size: 40px;        /* larger text */
+    font-family: sans-serif;
+    font-weight: 300;
+    height: 80px;           /* was 60 */
+    margin: auto;
+    border:2px solid rgba(5, 218, 255, 0.726);
+    color: black;
+}
+
+.button{
+    width: 80px;            /* was 55 */
+    height: 80px;           /* was 55 */
+    font-size: 24px;        /* was 20 */
+    border: none;
+    background: white;
+    font-family: sans-serif;
+    font-weight: 300;
+    border-radius: 30px;
+    margin: 4px;            /* was 1.5 */
+    transition:0.25px;
+}
+
+.operator{
+    width: 80px;            /* was 55 */
+    height: 80px;           /* was 55 */
+    font-size: 24px;        /* was 20 */
+    color: black;
+    border: none;
+    background: white;
+    font-family: sans-serif;
+    font-weight: 500;
+    border-radius: 30px;
+    margin: 4px;
+    transition:0.25px;
+    cursor:pointer;
+}
+
+.operator:hover{
+    background: #00d9ff;
+}
+
+a {
+    font-size: 34px;        /* increased link size */
+    cursor: pointer;
+    border-width: 3px;
+    border-radius: 10px;
+    border-style: solid;
+    padding: 10px;
+    margin: 10px;
+}
