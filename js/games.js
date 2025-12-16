@@ -1,18 +1,13 @@
-// CDN URLs for game assets
-const assetsURLs = [
-    "https://cdn.jsdelivr.net/gh/Toaster68/assets@main/zones.json",
-    "https://cdn.jsdelivr.net/gh/Toaster68/assets@latest/zones.json",
-    "https://cdn.jsdelivr.net/gh/Toaster68/assets@master/zones.json",
-    "https://cdn.jsdelivr.net/gh/Toaster68/assets/zones.json"
-];
-let assetsURL = assetsURLs[Math.floor(Math.random() * assetsURLs.length)];
+// Always use jsDelivr latest by default (will be replaced with specific SHA if available)
+let assetsURL = "https://cdn.jsdelivr.net/gh/Toaster68/assets@latest/zones.json";
 const coverURL = "https://cdn.jsdelivr.net/gh/Toaster68/covers@main";
 const htmlURL = "https://cdn.jsdelivr.net/gh/Toaster68/html@main";
 
 let gamelist = [];
 let popularityData = {};
-const gameViewer = document.getElementById('gameViewer');
-let gameFrame = document.getElementById('gameFrame');
+// Elements are queried after DOMContentLoaded to avoid null reads when script is loaded in <head>
+let gameViewer;
+let gameFrame;
 
 // Initialize when DOM is ready
 if (document.readyState === "complete") {
@@ -22,6 +17,10 @@ if (document.readyState === "complete") {
 }
 
 function initializeGames() {
+    // Query DOM elements now that content is loaded
+    gameViewer = document.getElementById('gameViewer');
+    gameFrame = document.getElementById('gameFrame');
+
     loadGames();
     setupSearchListener();
 }
@@ -31,16 +30,17 @@ async function loadGames() {
         // Try to get latest commit SHA for cache busting
         let sha;
         try {
-            const shaResponse = await fetch("https://api.github.com/repos/Toaster68/assets/commits?t=" + Date.now());
+            // Fetch the most recent commit SHA so we can use the exact revision on jsDelivr
+            const shaResponse = await fetch("https://api.github.com/repos/Toaster68/assets/commits?per_page=1&t=" + Date.now());
             if (shaResponse && shaResponse.status === 200) {
                 const shaJson = await shaResponse.json();
-                sha = shaJson[0]['sha'];
-                if (sha) {
+                if (Array.isArray(shaJson) && shaJson[0] && shaJson[0].sha) {
+                    sha = shaJson[0].sha;
                     assetsURL = `https://cdn.jsdelivr.net/gh/Toaster68/assets@${sha}/zones.json`;
                 }
             }
         } catch (error) {
-            console.log("Could not fetch latest SHA, using default URL");
+            console.log("Could not fetch latest SHA, using @latest URL");
         }
 
         // Fetch game data
@@ -87,8 +87,9 @@ async function fetchPopularity() {
 }
 
 function sortGames() {
-    const sortBy = document.getElementById('sortOptions').value;
-    
+    const sortElem = document.getElementById('sortOptions');
+    const sortBy = sortElem ? sortElem.value : 'id';
+
     if (sortBy === 'name') {
         gamelist.sort((a, b) => a.name.localeCompare(b.name));
     } else if (sortBy === 'id') {
@@ -128,7 +129,8 @@ function displayGames(games) {
     if (container.innerHTML === "") {
         container.innerHTML = "No games found.";
     } else {
-        document.getElementById("allSummary").textContent = `All Games (${games.length})`;
+        const allSummary = document.getElementById("allSummary");
+        if (allSummary) allSummary.textContent = `All Games (${games.length})`;
     }
 }
 
@@ -140,18 +142,26 @@ function openGame(game) {
         fetch(url + "?t=" + Date.now())
             .then(response => response.text())
             .then(html => {
-                if (gameFrame.contentDocument === null) {
+                // Ensure we have an iframe to write into
+                if (!gameFrame || !gameFrame.contentDocument) {
                     gameFrame = document.createElement("iframe");
                     gameFrame.id = "gameFrame";
-                    gameViewer.appendChild(gameFrame);
+                    if (gameViewer) gameViewer.appendChild(gameFrame);
                 }
-                gameFrame.contentDocument.open();
-                gameFrame.contentDocument.write(html);
-                gameFrame.contentDocument.close();
-                
-                document.getElementById('gameName').textContent = game.name;
-                document.getElementById('gameId').textContent = game.id;
-                gameViewer.style.display = "flex";
+
+                // Some browsers don't expose contentDocument until appended
+                const doc = gameFrame.contentDocument || (gameFrame.contentWindow && gameFrame.contentWindow.document);
+                if (doc) {
+                    doc.open();
+                    doc.write(html);
+                    doc.close();
+                }
+
+                const nameEl = document.getElementById('gameName');
+                const idEl = document.getElementById('gameId');
+                if (nameEl) nameEl.textContent = game.name;
+                if (idEl) idEl.textContent = game.id;
+                if (gameViewer) gameViewer.style.display = "flex";
                 
                 const url = new URL(window.location);
                 url.searchParams.set('id', game.id);
