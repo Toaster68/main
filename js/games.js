@@ -7,7 +7,7 @@ const zonesurls = [
 // Always use jsDelivr latest by default (will be replaced with specific SHA if available)
 let assetsURL = zonesurls[Math.floor(Math.random() * zonesurls.length)];
 const coverURL = "https://cdn.jsdelivr.net/gh/gn-math/covers@main";
-const htmlURL = "https://cdn.jsdelivr.net/gh/gn-math/html@main";
+const htmlURL = "https://cdn.jsdelivr.net/gh/Toaster68/html2@main";
 
 let gamelist = [];
 let popularityData = {};
@@ -37,12 +37,12 @@ async function loadGames() {
         let sha;
         try {
             // Fetch the most recent commit SHA so we can use the exact revision on jsDelivr
-            const shaResponse = await fetch("https://api.github.com/repos/gn-math/assets/commits?per_page=1&t=" + Date.now());
+            const shaResponse = await fetch("https://api.github.com/repos/Toaster68/assets/commits?per_page=1&t=" + Date.now());
             if (shaResponse && shaResponse.status === 200) {
                 const shaJson = await shaResponse.json();
                 if (Array.isArray(shaJson) && shaJson[0] && shaJson[0].sha) {
                     sha = shaJson[0].sha;
-                    assetsURL = `https://cdn.jsdelivr.net/gh/gn-math/assets@${sha}/zones.json`;
+                    assetsURL = `https://cdn.jsdelivr.net/gh/Toaster68/assets@${sha}/zones.json`;
                 }
             }
         } catch (error) {
@@ -77,7 +77,7 @@ async function loadGames() {
 
 async function fetchPopularity() {
     try {
-        const response = await fetch("https://data.jsdelivr.com/v1/stats/packages/gh/Toaster68/html@main/files?period=year");
+        const response = await fetch("https://data.jsdelivr.com/v1/stats/packages/gh/Toaster68/html2@main/files?period=year");
         const data = await response.json();
         data.forEach(file => {
             const idMatch = file.name.match(/\/(\d+)\.html$/);
