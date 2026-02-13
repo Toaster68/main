@@ -1,13 +1,7 @@
-// https://www.jsdelivr.com/tools/purge
-const zonesurls = [
-    "https://cdn.jsdelivr.net/gh/Toaster68/assets2@latest/zones.json",
-    "https://cdn.jsdelivr.net/gh/Toaster68/assets2@master/zones.json",
-    "https://cdn.jsdelivr.net/gh/Toaster68/assets2/zones.json"
-];
 // Always use jsDelivr latest by default (will be replaced with specific SHA if available)
-let assetsURL = zonesurls[Math.floor(Math.random() * zonesurls.length)];
-const coverURL = "https://cdn.jsdelivr.net/gh/gn-math/covers@main";
-const htmlURL = "https://cdn.jsdelivr.net/gh/Toaster68/html2@main";
+let assetsURL = "https://cdn.jsdelivr.net/gh/Toaster68/assets@latest/zones.json";
+const coverURL = "https://cdn.jsdelivr.net/gh/Toaster68/covers@main";
+const htmlURL = "https://cdn.jsdelivr.net/gh/Toaster68/html@main";
 
 let gamelist = [];
 let popularityData = {};
@@ -77,7 +71,7 @@ async function loadGames() {
 
 async function fetchPopularity() {
     try {
-        const response = await fetch("https://data.jsdelivr.com/v1/stats/packages/gh/Toaster68/html2@main/files?period=year");
+        const response = await fetch("https://data.jsdelivr.com/v1/stats/packages/gh/Toaster68/html@main/files?period=year");
         const data = await response.json();
         data.forEach(file => {
             const idMatch = file.name.match(/\/(\d+)\.html$/);
