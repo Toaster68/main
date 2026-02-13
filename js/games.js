@@ -1,9 +1,8 @@
 // https://www.jsdelivr.com/tools/purge
 const zonesurls = [
-    "https://cdn.jsdelivr.net/%67%68/%67%6e%2d%6d%61%74%68/%61%73%73%65%74%73@%6d%61%69%6e/%7a%6f%6e%65%73%2e%6a%73%6f%6e",
-    "https://cdn.jsdelivr.net/gh/gn-math/assets@latest/zones.json",
-    "https://cdn.jsdelivr.net/gh/gn-math/assets@master/zones.json",
-    "https://cdn.jsdelivr.net/gh/gn-math/assets/zones.json"
+    "https://cdn.jsdelivr.net/gh/Toaster68/assets2@latest/zones.json",
+    "https://cdn.jsdelivr.net/gh/Toaster68/assets2@master/zones.json",
+    "https://cdn.jsdelivr.net/gh/Toaster68/assets2/zones.json"
 ];
 // Always use jsDelivr latest by default (will be replaced with specific SHA if available)
 let assetsURL = zonesurls[Math.floor(Math.random() * zonesurls.length)];
