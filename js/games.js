@@ -7,7 +7,7 @@ const zonesurls = [
 // Always use jsDelivr latest by default (will be replaced with specific SHA if available)
 let assetsURL = zonesurls[Math.floor(Math.random() * zonesurls.length)];
 const coverURL = "https://cdn.jsdelivr.net/gh/gn-math/covers@main";
-const htmlURL = "https://cdn.jsdelivr.net/gh/Toaster68/html2@main";
+const htmlURL = "https://cdn.jsdelivr.net/gh/Toaster68/html2@2949302";
 
 let gamelist = [];
 let popularityData = {};
@@ -77,7 +77,7 @@ async function loadGames() {
 
 async function fetchPopularity() {
     try {
-        const response = await fetch("https://data.jsdelivr.com/v1/stats/packages/gh/Toaster68/html2@main/files?period=year");
+        const response = await fetch("https://data.jsdelivr.com/v1/stats/packages/gh/Toaster68/html2@2949302/files?period=year");
         const data = await response.json();
         data.forEach(file => {
             const idMatch = file.name.match(/\/(\d+)\.html$/);
