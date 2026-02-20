@@ -37,12 +37,12 @@ async function loadGames() {
         let sha;
         try {
             // Fetch the most recent commit SHA so we can use the exact revision on jsDelivr
-            const shaResponse = await fetch("https://api.github.com/repos/Toaster68/assets/commits?per_page=1&t=" + Date.now());
+            const shaResponse = await fetch("https://api.github.com/repos/Toaster68/assets2/commits?per_page=1&t=" + Date.now());
             if (shaResponse && shaResponse.status === 200) {
                 const shaJson = await shaResponse.json();
                 if (Array.isArray(shaJson) && shaJson[0] && shaJson[0].sha) {
                     sha = shaJson[0].sha;
-                    assetsURL = `https://cdn.jsdelivr.net/gh/Toaster68/assets@${sha}/zones.json`;
+                    assetsURL = `https://cdn.jsdelivr.net/gh/Toaster68/assets2@${sha}/zones.json`;
                 }
             }
         } catch (error) {
