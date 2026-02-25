@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html class="sl-theme-dark" lang="en">
+  <head>
+    <!-- initialize externals -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src=" https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js "></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.9.0/cdn/themes/dark.css" />
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.9.0/cdn/shoelace-autoloader.js"></script>
+
+    <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "ocwa441dmy");
+    </script>
+
+    <!-- initialize my stuff -->
+    <script src="https://cdn.jsdelivr.net/gh/Toaster68/main/js/all.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Toaster68/main/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Toaster68/main/js/themes.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Toaster68/main/js/games.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Toaster68/main/themes.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Toaster68/main/style.css" />
+
+    <!-- seo + other things -->
+    <title>Games | Sodalite</title>
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/Toaster68/main/favicon.ico" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+  </head>
+
+  <body>
+
+    <main>
+      <h2>Games</h2>
+      <h3> Just added 56 more games! </h3>
+      <p>Popular games tab + finished v2 site coming soon</p>
+
+      <div class="search-controls">
+        <input type="text" id="gamesearch" placeholder="Search games..." />
+      </div>
+
+      <div class="data-controls">
+        <button onclick="saveData()">Export game saves</button>
+        <button onclick="document.getElementById('importData').click()">Import game saves</button>
+        <input type="file" id="importData" style="display: none;" onchange="loadData(event)">
+      </div>
+
+      <details id="allGamesWrapper" open>
+        <summary id="allSummary" style="font-size: 1.2rem; font-weight: bold; cursor: pointer; margin-bottom: 1rem;">All Games</summary>
+        <div id="games">Loading...</div>
+      </details>
+    </main>
+
+    <!-- Game Viewer -->
+    <div id="gameViewer" style="display: none;">
+      <div class="game-header">
+        <div class="game-controls">
+          <button onclick="closeGame()">Back</button>
+        </div>
+        <div class="game-title">
+          <h2 id="gameName">Game</h2>
+          <span id="gameId" style="display: none;"></span>
+        </div>
+        <div class="game-controls">
+          <button onclick="fullscreenGame()">Fullscreen</button>
+        </div>
+      </div>
+      <iframe id="gameFrame"></iframe>
+    </div>
+  </body>
+</html>
