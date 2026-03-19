@@ -6,7 +6,7 @@ const zonesurls = [
 ];
 // Always use jsDelivr latest by default (will be replaced with specific SHA if available)
 let assetsURL = zonesurls[Math.floor(Math.random() * zonesurls.length)];
-const coverURL = "https://cdn.jsdelivr.net/gh/gn-math/covers@main";
+const coverURL = "https://cdn.jsdelivr.net/gh/Toaster68/covers2@main";
 const htmlURL = "https://cdn.jsdelivr.net/gh/Toaster68/html2@main";
 
 let gamelist = [];
