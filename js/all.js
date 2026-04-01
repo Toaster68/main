@@ -325,40 +325,77 @@ function getCookie(cname) {
     // East Coast (EDT) Unix Time Check for 2026
     // ==========================================
     
-    // Start: Wed, April 1, 2026 12:00:00 AM EDT (1775016000000 ms)
     const startAprilFools = 1775016000000; 
-    
-    // End: Wed, April 1, 2026 11:59:59 PM EDT (1775102399999 ms)
     const endAprilFools = 1775102399999;
-    
-    // Get current Unix timestamp
     const now = Date.now();
 
-    // If current time is outside this window, exit completely
     if (now < startAprilFools || now > endAprilFools) return;
+
+    // ==========================================
+    // Cookie Management (JSON Format)
+    // ==========================================
+    
+    // Check if the user has already been pranked
+    function getPrankCookie() {
+        // Look specifically for our 'af_prank' cookie
+        const match = document.cookie.match(new RegExp('(^| )af_prank=([^;]+)'));
+        if (match) {
+            try {
+                // Parse the JSON string back into an object
+                return JSON.parse(decodeURIComponent(match[2]));
+            } catch (e) {
+                return { pranked: false };
+            }
+        }
+        return { pranked: false };
+    }
+
+    // Save the prank status in a JSON object so it doesn't conflict with other cookies
+    function setPrankCookie() {
+        const data = JSON.stringify({ pranked: true });
+        // Set max-age to 86400 seconds (24 hours) so it expires naturally
+        document.cookie = `af_prank=${encodeURIComponent(data)}; path=/; max-age=86400`;
+    }
+
+    // If the cookie says they've been pranked, exit completely
+    if (getPrankCookie().pranked) return;
 
     // ==========================================
     // Prank Logic
     // ==========================================
     
     function initPrank() {
-        // Failsafe: if the body still isn't ready, wait a frame and try again
         if (!document.body) {
             requestAnimationFrame(initPrank);
             return;
         }
 
-        // --- 1. The 10-Second Page Tilt ---
+        // --- 1. The 10-Second Page Tilt (2 Degrees) ---
+        
+        // Save the original overflow state to prevent layout breaking/scrollbars
+        const originalOverflow = document.documentElement.style.overflowX;
+        document.documentElement.style.overflowX = "hidden";
         
         document.body.style.transition = "transform 2s ease-in-out";
         document.body.style.transformOrigin = "center center";
         
-        document.body.style.transform = "rotate(3deg)";
+        // Tilt the whole page by 2 degrees
+        document.body.style.transform = "rotate(2deg)";
 
+        // Revert after 10 seconds
         setTimeout(() => {
             if (document.body) {
                 document.body.style.transform = "rotate(0deg)";
+                
+                // Wait 2 seconds for the CSS transition to finish before restoring overflow
+                setTimeout(() => {
+                    document.documentElement.style.overflowX = originalOverflow;
+                }, 2000);
             }
+            
+            // Set the JSON cookie now that the prank has run its course
+            setPrankCookie();
+            
         }, 10000);
 
         // --- 2. The Fading Clown Cursor Trail ---
@@ -372,7 +409,7 @@ function getCookie(cname) {
             left: '0',
             pointerEvents: 'none',
             fontSize: '2rem',
-            zIndex: '2147483647', // Max z-index
+            zIndex: '2147483647',
             opacity: '0',
             transition: 'opacity 0.4s ease, transform 0.05s linear',
             userSelect: 'none'
