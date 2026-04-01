@@ -18,381 +18,390 @@
   <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_high_contrast/bundles/react_todo_sidebar-df089b77a5.css" media="screen">
 
   <!-- Existing site styles (scoped — used only by #gameViewer) -->
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/themes.css" />
 
   <style>
+    /* =========================================================
+       CANVAS VARIABLE FALLBACKS
+       ========================================================= */
     :root {
-      --canvas-bg: #f5f5f5;
-      --canvas-surface: #ffffff;
-      --canvas-border: #e8eaec;
-      --canvas-text: #273540;
-      --canvas-muted: #4a5b68;
-      --canvas-primary: #0A5A9E;
-      --canvas-nav: #334451;
-      --canvas-nav-hover: rgba(0, 0, 0, 0.2);
-    }
-
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      font-family: "Lato Extended", Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-size: 16px;
-      color: var(--canvas-text);
-      background: var(--canvas-bg);
-    }
-
-    body.projects-page {
-      margin-left: 54px;
-      overflow-x: hidden;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    a {
-      color: inherit;
+      --ic-brand-primary: #0A5A9E;
+      --ic-brand-font-color-dark: #273540;
+      --ic-link-color: #09508C;
+      --ic-brand-button--primary-bgd: #0A5A9E;
+      --ic-brand-button--primary-text: #ffffff;
+      --ic-brand-global-nav-bgd: #334451;
+      --ic-brand-global-nav-ic-icon-svg-fill: #ffffff;
+      --ic-brand-global-nav-ic-icon-svg-fill--active: var(--ic-brand-primary);
+      --ic-brand-global-nav-menu-item__text-color: #ffffff;
+      --ic-brand-global-nav-menu-item__text-color--active: #09508C;
     }
 
     /* =========================================================
-       CANVAS GLOBAL NAV (left sidebar)
+       BASE STYLES - DARK TEXT ON LIGHT BACKGROUND
+       ========================================================= */
+    html, body {
+      height: 100%;
+      font-family: "Lato Extended", Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 1rem;
+      color: #273540 !important;
+      background: #f5f5f5 !important;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* =========================================================
+       CANVAS GLOBAL NAV (left sidebar) - NO ROUNDED CORNERS
        ========================================================= */
     .ic-app-header {
+      box-sizing: border-box;
       position: fixed;
-      inset: 0 auto 0 0;
-      width: 54px;
+      top: 0;
+      left: 0;
+      height: 100%;
       display: flex;
       flex-direction: column;
-      background: var(--canvas-nav);
-      border-radius: 0;
-      z-index: 1000;
+      width: 54px;
+      z-index: 100;
+      background-color: var(--ic-brand-global-nav-bgd);
+      border-radius: 0 !important;
     }
-
     .ic-app-header__main-navigation {
-      flex: 1 1 auto;
-      min-height: 0;
+      box-sizing: border-box;
+      flex: 1 0 auto;
+      display: flex;
+      flex-direction: column;
     }
-
+    .ic-app-header__main-navigation a {
+      text-decoration: none;
+    }
     .ic-app-header__secondary-navigation {
-      margin-top: auto;
+      box-sizing: border-box;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      z-index: 1;
       width: 100%;
     }
-
     .ic-app-header__menu-list {
+      margin: 0;
+      padding: 0;
       list-style: none;
+      display: flex;
+      flex-direction: column;
+    }
+    .ic-app-header__menu-list li {
       margin: 0;
       padding: 0;
     }
-
     .ic-app-header__menu-list-item {
-      margin: 0;
-      padding: 0;
+      box-sizing: border-box;
+      border-radius: 0 !important;
     }
-
+    .ic-app-header__menu-list-item svg {
+      width: 1.625rem;
+      height: 1.625rem;
+    }
+    .ic-app-header__menu-list-item.ic-app-header__menu-list-item--active .ic-app-header__menu-list-link {
+      background: #ffffff;
+      border-radius: 0 !important;
+    }
+    .ic-app-header__menu-list-item.ic-app-header__menu-list-item--active .ic-icon-svg {
+      fill: var(--ic-brand-primary);
+    }
+    .ic-app-header__menu-list-item.ic-app-header__menu-list-item--active .menu-item-icon-container {
+      color: var(--ic-brand-primary);
+    }
+    .ic-app-header__menu-list-item.ic-app-header__menu-list-item--active .menu-item__text {
+      color: var(--ic-brand-primary);
+    }
     .ic-app-header__menu-list-link {
+      box-sizing: border-box;
+      transition: background-color 0.3s, padding 0.3s;
+      position: relative;
+      text-align: center;
       display: block;
-      width: 100%;
+      color: var(--ic-brand-global-nav-menu-item__text-color);
+      border-style: none;
+      border-radius: 0 !important;
       padding: 0.4375rem 0;
       text-decoration: none;
-      text-align: center;
-      color: #fff;
-      border-radius: 0;
-      transition: background-color 0.2s ease, color 0.2s ease;
     }
-
     .ic-app-header__menu-list-link:hover,
     .ic-app-header__menu-list-link:focus {
-      background: var(--canvas-nav-hover);
+      background-color: rgba(0, 0, 0, 0.2);
+      border-radius: 0 !important;
     }
-
-    .ic-app-header__menu-list-item--active .ic-app-header__menu-list-link {
-      background: #fff;
-    }
-
-    .ic-app-header__menu-list-item--active .menu-item__text,
-    .ic-app-header__menu-list-item--active .ic-icon-svg,
-    .ic-app-header__menu-list-item--active .menu-item-icon-container {
-      color: var(--canvas-primary);
-      fill: var(--canvas-primary);
-    }
-
     .menu-item-icon-container {
+      position: relative;
       width: 26px;
       height: 26px;
       margin: 0 auto;
-      color: currentColor;
+      color: var(--ic-brand-global-nav-ic-icon-svg-fill);
     }
-
-    .menu-item-icon-container svg,
-    .ic-icon-svg {
-      display: block;
+    .menu-item-icon-container svg {
       fill: currentColor;
+      display: block;
     }
-
+    .ic-icon-svg {
+      fill: var(--ic-brand-global-nav-ic-icon-svg-fill);
+    }
+    .ic-app-header__menu-list-item.ic-app-header__menu-list-item--active .ic-icon-svg {
+      fill: var(--ic-brand-global-nav-ic-icon-svg-fill--active);
+    }
+    .menu-item__badge {
+      display: none;
+    }
     .menu-item__text {
       display: block;
-      padding-top: 0.1875rem;
       font-size: 0.5625rem;
-      font-weight: 700;
-      line-height: 1;
+      font-weight: bold;
       letter-spacing: 0.03em;
+      line-height: 1;
+      padding: 0.1875rem 0.25rem 0;
+      color: inherit;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      color: inherit;
     }
-
+    /* Avatar for profile item */
     .ic-avatar {
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.5);
       width: 36px;
       height: 36px;
-      margin: 0 auto;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 50%;
-      border: 2px solid rgba(255, 255, 255, 0.5);
       background: #555;
-      color: #fff;
       font-size: 1rem;
-      font-weight: 700;
-      overflow: hidden;
+      color: #fff;
+      font-weight: bold;
+      margin: 0 auto;
     }
 
     /* =========================================================
-       MAIN CANVAS LAYOUT
+       CANVAS LAYOUT
        ========================================================= */
+    body {
+      margin-left: 54px;
+    }
     .ic-Layout-wrapper {
+      box-sizing: border-box;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
-
     .ic-Layout-columns {
-      flex: 1 1 auto;
-      min-width: 0;
       position: relative;
+      box-sizing: border-box;
+      z-index: 10;
+      flex: 1 0 auto;
+      min-width: 1px;
     }
-
-    .ic-app-main-content {
-      display: flex;
-      align-items: flex-start;
-      min-width: 0;
-    }
-
-    .ic-Layout-contentWrapper {
-      flex: 1 1 auto;
-      min-width: 0;
-    }
-
-    .ic-Layout-contentMain {
-      padding: 28px 32px 48px;
-      min-width: 0;
-    }
-
-    .ic-app-main-content__secondary {
-      width: 320px;
-      flex: 0 0 320px;
-      padding: 24px 24px 24px 16px;
-      position: sticky;
-      top: 0;
-      align-self: flex-start;
-      z-index: 2;
-    }
-
-    #right-side {
-      position: relative;
-    }
-
-    .ic-dashboard-app {
-      margin-top: 0;
-    }
-
-    .screenreader-only {
-      border: 0;
-      clip: rect(0, 0, 0, 0);
-      height: 1px;
-      margin: -1px;
-      overflow: hidden;
-      padding: 0;
+    .ic-Layout-watermark {
       position: absolute;
-      width: 1px;
+      left: 0;
+      bottom: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+    }
+    .ic-app-main-content {
+      box-sizing: border-box;
+      flex: 1 1 0%;
+      min-width: 1px;
+      display: flex;
+    }
+    .ic-Layout-contentWrapper {
+      box-sizing: border-box;
+      flex: 1 1 0%;
+      min-width: 1px;
+    }
+    .ic-Layout-contentMain {
+      padding: 36px 48px 48px;
+      box-sizing: border-box;
+    }
+    .ic-app-main-content__secondary {
+      box-sizing: border-box;
+      min-width: 1px;
+      padding: 24px 24px 24px 24px;
+      position: relative;
+      width: 288px;
+      flex-shrink: 0;
     }
 
     /* =========================================================
-       DASHBOARD HEADER
+       CANVAS DASHBOARD HEADER
        ========================================================= */
+    .ic-dashboard-app {
+      margin-top: -24px;
+    }
     .ic-Dashboard-header {
       position: sticky;
       top: 0;
       z-index: 5;
     }
-
     .ic-Dashboard-header__layout {
       display: flex;
       align-items: center;
       flex-wrap: wrap;
-      gap: 12px;
+      border-bottom: 1px solid #e8eaec;
+      background: rgba(255, 255, 255, 0.95);
+      box-sizing: border-box;
+      height: auto;
       min-height: 4.5rem;
       padding: 0 0.75rem;
-      border-bottom: 1px solid var(--canvas-border);
-      background: rgba(255, 255, 255, 0.95);
     }
-
     .ic-Dashboard-header__title {
-      flex: 1 1 auto;
       margin: 0;
+      flex: 1 1 0%;
       padding-right: 12px;
+      box-sizing: border-box;
       font-size: 1.5rem;
-      line-height: 1.2;
       font-weight: 700;
-      color: var(--canvas-text);
+      color: #273540 !important;
     }
-
     .ic-Dashboard-header__actions {
+      box-sizing: border-box;
       display: flex;
       align-items: center;
       justify-content: flex-end;
       gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    #gamesearch,
-    #sortOptions {
-      border: 1px solid #c7cdd1;
-      border-radius: 4px;
-      background: #fff;
-      color: var(--canvas-text);
-      font-size: 0.875rem;
-      padding: 6px 12px;
-    }
-
-    #gamesearch {
-      width: 220px;
-    }
-
-    #gamesearch:focus,
-    #sortOptions:focus {
-      outline: 2px solid var(--canvas-primary);
-      outline-offset: 0;
-      border-color: var(--canvas-primary);
     }
 
     /* =========================================================
-       DASHBOARD CARDS — 3 across on wide screens
+       CANVAS DASHBOARD CARDS - 3 CARDS ACROSS LAYOUT
        ========================================================= */
-    #DashboardCard_Container {
-      display: block;
-    }
-
     .ic-DashboardCard__box {
-      padding: 24px 0 0;
+      padding: 24px 0.125rem 0;
     }
-
     .ic-DashboardCard__box__container {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fill, minmax(262px, 1fr));
+      gap: 36px;
       margin: 0;
-      align-items: start;
     }
-
     .ic-DashboardCard {
-      width: 100%;
-      margin: 0;
-      overflow: hidden;
+      box-sizing: border-box;
+      box-shadow: rgba(0,0,0,0.3) 0 2px 5px;
       border-radius: 4px;
+      overflow: hidden;
       background: #fff;
-      box-shadow: rgba(0, 0, 0, 0.3) 0 2px 5px;
+      width: 262px;
+      display: inline-block;
+      vertical-align: top;
       cursor: pointer;
-      display: flex;
-      flex-direction: column;
+      transition: box-shadow 0.2s;
     }
-
     .ic-DashboardCard:hover {
-      box-shadow: rgba(0, 0, 0, 0.35) 0 4px 10px;
+      box-shadow: rgba(0,0,0,0.35) 0 4px 10px;
     }
-
     .ic-DashboardCard__header {
       position: relative;
       cursor: pointer;
+      box-sizing: border-box;
     }
-
     .ic-DashboardCard__header_image {
-      height: 146px;
       background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;
-    }
-
-    .ic-DashboardCard__header_hero {
       height: 146px;
-      border: 1px solid rgba(0, 0, 0, 0.1);
+      position: relative;
     }
-
+    .ic-DashboardCard__header_hero {
+      box-sizing: border-box;
+      height: 146px;
+      border: 1px solid rgba(0,0,0,0.1);
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
     .ic-DashboardCard__header_content {
+      box-sizing: border-box;
       padding: 12px 18px 0;
       background: #fff;
       border: 0.125rem solid transparent;
-      border-radius: 0;
+      border-radius: 6px;
+      transition: border-color 0.2s;
     }
-
     .ic-DashboardCard__header-title {
-      margin: 0;
+      transition: 0.2s ease-out;
       padding: 0;
+      margin: 0;
       line-height: 1.3;
       font-size: 0.875rem;
-      font-weight: 700;
+      font-weight: bold;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      color: var(--canvas-text);
     }
-
     .ic-DashboardCard__header-title span {
-      color: var(--canvas-text) !important;
+      color: #273540 !important;
     }
-
     .ic-DashboardCard__header-subtitle {
-      margin-top: 4px;
       line-height: 1.3;
+      padding: 0;
+      margin-top: 4px;
       font-size: 0.75rem;
-      color: var(--canvas-muted);
+      color: #4a5b68 !important;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-
     .ic-DashboardCard__header-term {
       line-height: 1.3;
       font-size: 12px;
       height: 1rem;
-      color: #666;
+      color: #666 !important;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-
     .ic-DashboardCard__action-container {
+      box-sizing: border-box;
       display: flex;
       align-items: flex-end;
       padding: 0 0 12px;
       margin-top: 9px;
       height: 2.5rem;
     }
-
     .ic-DashboardCard__action {
+      transition: color 0.2s;
+      box-sizing: border-box;
+      color: #3e5466;
+      flex: 0 0 25%;
       display: flex;
       justify-content: center;
-      flex: 0 0 100%;
-      color: var(--canvas-primary);
-      font-size: 22px;
     }
-
+    .ic-DashboardCard__action:hover {
+      color: var(--ic-brand-primary);
+    }
     .ic-DashboardCard__action-layout {
       position: relative;
       font-size: 24px;
     }
-
+    .ic-DashboardCard__header-button {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.25rem;
+    }
     .ic-DashboardCard__header-button-bg {
       position: absolute;
       top: 12px;
@@ -401,245 +410,245 @@
       height: 36px;
       border-radius: 50%;
     }
+    .ic-DashboardCard__link {
+      text-decoration: none;
+      display: block;
+    }
 
     /* =========================================================
-       TODO SIDEBAR
+       CANVAS TODO SIDEBAR
        ========================================================= */
     .todo-list-header {
-      margin: 0 0 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--canvas-border);
       font-size: 1.5rem;
       font-weight: 700;
-      color: var(--canvas-text);
+      margin: 0 0 16px 0;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e8eaec;
+      color: #273540 !important;
     }
-
     #planner-todosidebar-item-list {
       list-style: none;
+      padding: 0;
       margin: 0;
-      padding: 0;
     }
-
     .canvas-todo-item {
-      margin: 0 0 12px;
       padding: 0;
+      margin: 0 0 12px 0;
     }
-
     .ToDoSidebarItem {
+      line-height: 1.1;
       display: flex;
       align-items: flex-start;
-      line-height: 1.1;
       margin: 0 0 6px;
     }
-
     .ToDoSidebarItem__Icon {
       display: block;
+      font-size: 1rem;
       margin-top: 4px;
-      flex-shrink: 0;
       color: #3e5466;
+      flex-shrink: 0;
     }
-
     .ToDoSidebarItem__Info {
-      flex: 1 1 auto;
       min-width: 0;
+      flex: 1 1 0%;
       padding: 0 6px 0 9px;
       margin-top: 4px;
     }
-
     .ToDoSidebarItem__Title {
       margin-bottom: 3px;
       font-size: 0.875rem;
-      font-weight: 700;
-      color: var(--canvas-text);
+      font-weight: bold;
+      color: #273540 !important;
     }
-
     .ToDoSidebarItem__CourseLabel {
-      margin-top: 2px;
       font-size: 0.75rem;
-      color: var(--canvas-muted);
+      color: #4a5b68 !important;
+      margin-top: 2px;
     }
-
     .ToDoSidebarItem__DueDate {
-      margin-top: 2px;
       font-size: 0.75rem;
-      color: #666;
+      color: #666 !important;
+      margin-top: 2px;
     }
-
     .ToDoSidebarItem__Close {
-      flex-shrink: 0;
       margin-top: 4px;
+      flex-shrink: 0;
     }
-
     .canvas-todo-dismiss {
-      border: 0;
       background: transparent;
-      color: #4a5b68;
+      border: none;
       cursor: pointer;
+      color: #4a5b68;
       padding: 2px;
       font-size: 0.75rem;
       border-radius: 3px;
     }
-
     .canvas-todo-dismiss:hover {
-      background: rgba(0, 0, 0, 0.07);
-      color: var(--canvas-text);
+      background: rgba(0,0,0,0.07);
+      color: #273540;
     }
 
+    /* Data controls in sidebar */
     .canvas-data-controls {
       margin-top: 24px;
       padding-top: 24px;
-      border-top: 1px solid var(--canvas-border);
+      border-top: 1px solid #e8eaec;
     }
-
     .canvas-data-controls h3 {
-      margin: 0 0 10px;
       font-size: 0.875rem;
       font-weight: 700;
-      color: var(--canvas-text);
+      margin: 0 0 10px 0;
+      color: #273540 !important;
     }
-
     .canvas-data-btn {
       display: block;
       width: 100%;
-      margin-bottom: 8px;
       padding: 8px 12px;
+      margin-bottom: 8px;
+      background: #f5f5f5;
       border: 1px solid #c7cdd1;
       border-radius: 4px;
-      background: #f5f5f5;
-      color: var(--canvas-text);
       font-size: 0.8125rem;
-      text-align: left;
+      color: #273540 !important;
       cursor: pointer;
+      text-align: left;
+      box-sizing: border-box;
     }
-
     .canvas-data-btn:hover {
       background: #e8eaec;
     }
 
-    /* =========================================================
-       LOADING / EMPTY / VIEWER
-       ========================================================= */
-    #games.loading-state {
+    /* Search in dashboard header */
+    #gamesearch {
+      box-sizing: border-box;
+      padding: 6px 12px;
+      border: 1px solid #c7cdd1;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      width: 220px;
+      color: #273540 !important;
+      background: #fff;
+    }
+    #gamesearch:focus {
+      outline: 2px solid var(--ic-brand-primary);
+      outline-offset: 0;
+      border-color: var(--ic-brand-primary);
+    }
+    #gamesearch::placeholder {
       color: #666;
+    }
+
+    /* Sort dropdown */
+    #sortOptions {
+      padding: 6px 12px;
+      border: 1px solid #c7cdd1;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      color: #273540 !important;
+      background: #fff;
+    }
+
+    /* Loading state */
+    #games.loading-state {
+      color: #666 !important;
       padding: 24px;
       font-style: italic;
     }
 
+    /* =========================================================
+       GAME VIEWER - FULL SCREEN, NO HEADER/FOOTER
+       ========================================================= */
     #gameViewer {
       position: fixed;
-      inset: 0;
-      z-index: 9999;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 99999;
+      background: #000;
       display: none;
       flex-direction: column;
-      background: #000;
     }
-
     #gameViewer .game-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      padding: 10px 12px;
-      background: #1f1f1f;
+      padding: 8px 16px;
+      background: #1a1a1a;
+      border-bottom: 1px solid #333;
+    }
+    #gameViewer .game-controls button {
+      padding: 8px 16px;
+      background: #333;
       color: #fff;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.875rem;
     }
-
-    #gameViewer .game-title {
-      min-width: 0;
-      flex: 1 1 auto;
-      text-align: center;
+    #gameViewer .game-controls button:hover {
+      background: #444;
     }
-
     #gameViewer .game-title h2 {
       margin: 0;
-      color: #fff;
+      color: #fff !important;
       font-size: 1rem;
-      font-weight: 700;
     }
-
-    #gameViewer .game-controls {
-      flex: 0 0 auto;
-    }
-
-    #gameViewer .game-controls button {
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      border-radius: 4px;
-      background: #2c2c2c;
-      color: #fff;
-      padding: 6px 12px;
-      cursor: pointer;
-    }
-
-    #gameViewer iframe {
+    #gameFrame {
+      flex: 1;
       width: 100%;
-      flex: 1 1 auto;
-      border: 0;
+      border: none;
       background: #000;
     }
 
     /* =========================================================
        RESPONSIVE
        ========================================================= */
-    @media (max-width: 1280px) {
-      .ic-DashboardCard__box__container {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 900px) {
-      .ic-app-main-content__secondary {
-        width: 280px;
-        flex-basis: 280px;
-      }
-
-      .ic-DashboardCard__box__container {
-        grid-template-columns: 1fr;
-      }
-    }
-
     @media (max-width: 768px) {
-      body.projects-page {
-        margin-left: 0;
-      }
+      body { margin-left: 0; }
+      .ic-app-header { display: none; }
+      .ic-Layout-contentMain { padding: 12px; }
+      .ic-app-main-content__secondary { display: none; }
+      .ic-DashboardCard { width: 100%; }
+      .ic-DashboardCard__box__container { grid-template-columns: 1fr; }
+    }
 
-      .ic-app-header {
-        display: none;
-      }
+    @media (min-width: 769px) and (max-width: 1100px) {
+      .ic-DashboardCard__box__container { grid-template-columns: repeat(2, 1fr); }
+    }
 
-      .ic-app-main-content {
-        flex-direction: column;
-      }
+    @media (min-width: 1101px) {
+      .ic-DashboardCard__box__container { grid-template-columns: repeat(3, 1fr); }
+    }
 
-      .ic-Layout-contentMain {
-        padding: 12px;
-      }
+    /* Screenreader only */
+    .screenreader-only {
+      border: 0;
+      clip: rect(0,0,0,0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+    }
 
-      .ic-app-main-content__secondary {
-        position: static;
-        width: 100%;
-        flex: 1 1 auto;
-        padding: 12px;
-      }
-
-      .ic-Dashboard-header__layout {
-        padding: 0 0.5rem;
-      }
-
-      #gamesearch {
-        width: 100%;
-      }
+    /* Ellipsis helper */
+    .ellipsis {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   </style>
-
 
   <!-- Existing game scripts -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
   <script src="/js/games.js"></script>
+<base target="_blank">
 </head>
 
-<body class="no-touch projects-page">
+<body class="no-touch">
 
   <!-- ========================================================
        CANVAS GLOBAL NAV (left sidebar, 54px wide, fixed)
@@ -689,7 +698,7 @@
           <a id="global_nav_calendar_link" href="/blog.html" class="ic-app-header__menu-list-link" title="Calendar">
             <div class="menu-item-icon-container" aria-hidden="true">
               <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--calendar" viewBox="0 0 280 280" xml:space="preserve">
-                <path d="M240.83,21.58H205.16V7.25H189.5V21.58H90.5V7.25H74.84V21.58H39.17A23.3,23.3,0,0,0,15.87,44.88V256.75A23.3,23.3,0,0,0,39.17,280H240.83a23.3,23.3,0,0,0,23.3-23.25V44.88A23.3,23.3,0,0,0,240.83,21.58ZM248.47,256.75a7.65,7.65,0,0,1-7.64,7.59H39.17a7.65,7.65,0,0,1-7.64-7.59V113.13H248.47ZM248.47,97.47H31.53V44.88a7.65,7.65,0,0,1,7.64-7.64H74.84V53.2H90.5V37.24h99V53.2h15.66V37.24h35.67a7.65,7.65,0,0,1,7.64,7.64Z"/>
+                <path d="M240.83,21.58H205.16V7.25H189.5V21.58H90.5V7.25H74.84V21.58H39.17A23.3,23.3,0,0,0,15.87,44.88V256.75A23.3,23.3,0,0,0,39.17,280H240.83a23.3,23.3,0,0,0,23.3-23.25V44.88A23.3,23.3,0,0,0,240.83,21.58ZM248.47,256.75a7.65,7.65,0,0,1-7.64,7.59H39.17a7.65,7.65,0,0,1-7.64-7.59V113.6H248.47ZM248.47,97.47H31.53V44.88a7.65,7.65,0,0,1,7.64-7.64H74.84V53.2H90.5V37.24h99V53.2h15.66V37.24h35.67a7.65,7.65,0,0,1,7.64,7.64Z"/>
                 <rect x="55.27" y="135.54" width="28" height="28"/>
                 <rect x="126" y="135.54" width="28" height="28"/>
                 <rect x="196.73" y="135.54" width="28" height="28"/>
@@ -756,7 +765,7 @@
       <!-- Main content + sidebar flex container -->
       <div id="not_right_side" class="ic-app-main-content">
 
-        <!-- ── LEFT: primary content ── -->
+        <!-- LEFT: primary content -->
         <div id="content-wrapper" class="ic-Layout-contentWrapper">
           <div id="content" class="ic-Layout-contentMain" role="main">
 
@@ -778,7 +787,7 @@
                 </div>
               </div>
 
-              <!-- Cards container — populated by games.js via overridden displayGames() -->
+              <!-- Cards container -->
               <div id="DashboardCard_Container" style="display: block;">
                 <div class="ic-DashboardCard__box">
                   <div class="ic-DashboardCard__box__container" id="games">
@@ -792,7 +801,7 @@
           </div><!-- /#content -->
         </div><!-- /#content-wrapper -->
 
-        <!-- ── RIGHT: sidebar ── -->
+        <!-- RIGHT: sidebar -->
         <div id="right-side-wrapper" class="ic-app-main-content__secondary" style="display: block;">
           <aside id="right-side" role="complementary">
 
@@ -805,7 +814,6 @@
                   <!-- Todo item 1: Study for Test / AP Gaming -->
                   <li class="canvas-todo-item" id="todo-item-1">
                     <div class="ToDoSidebarItem">
-                      <!-- Assignment icon SVG -->
                       <svg label="Assignment" name="IconAssignment" viewBox="0 0 1920 1920"
                            width="1em" height="1em" aria-hidden="true" role="presentation"
                            class="ToDoSidebarItem__Icon" style="width:1em;height:1em;">
@@ -869,7 +877,7 @@
   </div><!-- /#wrapper -->
 
   <!-- ========================================================
-       GAME VIEWER (original, completely unchanged)
+       GAME VIEWER - FULL SCREEN OVERLAY
        ======================================================== -->
   <div id="gameViewer" style="display: none;">
     <div class="game-header">
@@ -887,8 +895,11 @@
     <iframe id="gameFrame"></iframe>
   </div>
 
-  
+  <!-- ========================================================
+       DISPLAY OVERRIDE - Canvas-style game cards
+       ======================================================== -->
   <script>
+    // Card accent colors (Canvas palette)
     const _canvasCardColors = [
       '#0A5A9E', '#008005', '#E1185C', '#D9005F',
       '#B53E05', '#986C16', '#1C93A8', '#6B00C8',
@@ -896,18 +907,18 @@
     ];
 
     function _getCardColor(id) {
-      const idx = Math.abs(parseInt(id, 10) || 0) % _canvasCardColors.length;
+      const idx = Math.abs(parseInt(id) || 0) % _canvasCardColors.length;
       return _canvasCardColors[idx];
     }
 
-    const _playSVG = `<svg viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true" fill="currentColor">
-      <path d="M8 5v14l11-7z"/>
-    </svg>`;
-
+    /**
+     * Override the displayGames function from games.js.
+     * Renders games as Canvas ic-DashboardCard elements.
+     * Clicking the game title opens the game.
+     */
     window.displayGames = function(games) {
       const container = document.getElementById('games');
       if (!container) return;
-
       container.innerHTML = '';
 
       if (!games || games.length === 0) {
@@ -918,82 +929,103 @@
       games.forEach(function(game) {
         const color = _getCardColor(game.id);
 
-        const coverBase = 'https://cdn.jsdelivr.net/gh/Toaster68/covers2@main';
-        const htmlBase = 'https://cdn.jsdelivr.net/gh/Toaster68/html2@main';
-        const coverSrc = (game.cover || '')
-          .replace('{COVER_URL}', coverBase)
-          .replace('{HTML_URL}', htmlBase);
+        // Resolve cover URL (same logic as original displayGames)
+        const coverURL = 'https://cdn.jsdelivr.net/gh/Toaster68/covers2@main';
+        const htmlURL  = 'https://cdn.jsdelivr.net/gh/Toaster68/html2@main';
+        let coverSrc = '';
+        if (game.cover) {
+          coverSrc = game.cover
+            .replace('{COVER_URL}', coverURL)
+            .replace('{HTML_URL}', htmlURL);
+        }
 
-        const author = game.author || game.dev || game.developer || '';
-        const subtitle = author || ('Game #' + game.id);
+        // Get author/developer info
+        const author = game.author || game.dev || game.developer || 'Unknown Developer';
 
         const card = document.createElement('div');
         card.className = 'ic-DashboardCard';
         card.setAttribute('aria-label', game.name);
         card.setAttribute('data-testid', 'canvas-game-card');
+        card.style.opacity = '1';
 
+        // Build card HTML - clicking title opens game, no play button
         card.innerHTML = `
           <div class="ic-DashboardCard__header">
             <span class="screenreader-only">Cover image for ${game.name}</span>
-            <div class="ic-DashboardCard__header_image" style="background-image:url('${coverSrc}');">
-              <div class="ic-DashboardCard__header_hero" aria-hidden="true" style="background-color:${color}; opacity:${coverSrc ? '0' : '1'};"></div>
+            <div class="ic-DashboardCard__header_image" style="background-image: url('${coverSrc}'); height: 146px;">
+              <div class="ic-DashboardCard__header_hero"
+                   aria-hidden="true"
+                   style="background-color: ${color}; opacity: ${coverSrc ? '0' : '1'}; height: 146px;">
+              </div>
             </div>
-            <div class="ic-DashboardCard__header_content">
-              <h3 class="ic-DashboardCard__header-title ellipsis" title="${game.name}">
-                <span>${game.name}</span>
-              </h3>
-              <div class="ic-DashboardCard__header-subtitle ellipsis" title="${subtitle}">${subtitle}</div>
-              <div class="ic-DashboardCard__header-term ellipsis" title="Sodalite Games">Sodalite Games</div>
+            <a href="#" class="ic-DashboardCard__link" data-game-id="${game.id}">
+              <div class="ic-DashboardCard__header_content">
+                <h3 class="ic-DashboardCard__header-title ellipsis"
+                    title="${game.name}">
+                  <span style="color: ${color};">${game.name}</span>
+                </h3>
+                <div class="ic-DashboardCard__header-subtitle ellipsis"
+                     title="${author}">${author}</div>
+                <div class="ic-DashboardCard__header-term ellipsis"
+                     title="Sodalite Games">Sodalite Games</div>
+              </div>
+            </a>
+            <div>
+              <div class="ic-DashboardCard__header-button-bg"
+                   style="background-color: ${color}; opacity: 1;"></div>
             </div>
-            <div class="ic-DashboardCard__header-button-bg" style="background-color:${color};"></div>
           </div>
-          <nav class="ic-DashboardCard__action-container" aria-label="Actions for ${game.name}">
-            <span class="ic-DashboardCard__action" title="Play ${game.name}" style="color:${color};">
-              ${_playSVG}
-            </span>
+          <nav class="ic-DashboardCard__action-container"
+               aria-label="Actions for ${game.name}">
           </nav>
         `;
 
-        card.addEventListener('click', function() {
+        // Click on card opens the game
+        const link = card.querySelector('.ic-DashboardCard__link');
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
           openGame(game);
         });
 
         container.appendChild(card);
       });
 
+      // Update count in summary label if it exists
       const allSummary = document.getElementById('allSummary');
       if (allSummary) allSummary.textContent = 'All Games (' + games.length + ')';
     };
 
+    // Fix cover: if image fails to load, show color background
     document.addEventListener('DOMContentLoaded', function() {
-      const gamesContainer = document.getElementById('games');
-      if (!gamesContainer) return;
-
+      // Observe card additions and handle broken images
       const observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
           mutation.addedNodes.forEach(function(node) {
             if (node.nodeType === 1 && node.classList && node.classList.contains('ic-DashboardCard')) {
               const imgDiv = node.querySelector('.ic-DashboardCard__header_image');
               const heroDiv = node.querySelector('.ic-DashboardCard__header_hero');
-              if (!imgDiv || !heroDiv) return;
-
-              const bgImg = imgDiv.style.backgroundImage;
-              if (bgImg && bgImg !== 'none' && bgImg !== '') {
-                const url = bgImg.slice(5, -2);
-                const img = new Image();
-                img.onload = function() { heroDiv.style.opacity = '0'; };
-                img.onerror = function() {
-                  imgDiv.style.backgroundImage = 'none';
-                  heroDiv.style.opacity = '1';
-                };
-                img.src = url;
+              if (imgDiv && heroDiv) {
+                const bgImg = imgDiv.style.backgroundImage;
+                if (bgImg && bgImg !== 'none' && bgImg !== '') {
+                  // Test image load via a temporary Image element
+                  const url = bgImg.slice(5, -2); // strip url(' and ')
+                  const img = new Image();
+                  img.onload = function() { heroDiv.style.opacity = '0'; };
+                  img.onerror = function() {
+                    imgDiv.style.backgroundImage = 'none';
+                    heroDiv.style.opacity = '1';
+                  };
+                  img.src = url;
+                }
               }
             }
           });
         });
       });
-
-      observer.observe(gamesContainer, { childList: true });
+      const gamesContainer = document.getElementById('games');
+      if (gamesContainer) {
+        observer.observe(gamesContainer, { childList: true });
+      }
     });
   </script>
 
