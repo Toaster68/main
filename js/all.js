@@ -1,71 +1,3 @@
-(function() {
-    // ==========================================
-    // East Coast (EDT) Unix Time Check for 2026
-    // ==========================================
-    
-    // Start: Wed, April 1, 2026 12:00:00 AM EDT (1775016000000 ms)
-    const startAprilFools = 1775016000000; 
-    
-    // End: Wed, April 1, 2026 11:59:59 PM EDT (1775102399999 ms)
-    const endAprilFools = 1775102399999;
-    
-    // Get current Unix timestamp
-    const now = Date.now();
-
-    // If current time is outside this window, exit immediately
-    if (now < startAprilFools || now > endAprilFools) return;
-
-    // ==========================================
-    // 1. The 10-Second Page Tilt
-    // ==========================================
-    
-    document.body.style.transition = "transform 2s ease-in-out";
-    document.body.style.transformOrigin = "center center";
-    
-    // Tilt the whole page by 3 degrees
-    document.body.style.transform = "rotate(3deg)";
-
-    // After 10 seconds (10,000 milliseconds), revert back to normal
-    setTimeout(() => {
-        document.body.style.transform = "rotate(0deg)";
-    }, 10000);
-
-
-    // ==========================================
-    // 2. The Fading Clown Cursor Trail
-    // ==========================================
-    
-    const clown = document.createElement('div');
-    clown.innerText = '🤡';
-    
-    Object.assign(clown.style, {
-        position: 'fixed',
-        top: '0',
-        left: '0',
-        pointerEvents: 'none',
-        fontSize: '2rem',
-        zIndex: '9999999',
-        opacity: '0',
-        transition: 'opacity 0.4s ease, transform 0.05s linear'
-    });
-    
-    document.body.appendChild(clown);
-
-    let fadeTimeout;
-
-    document.addEventListener('mousemove', (e) => {
-        clown.style.transform = `translate(${e.clientX + 15}px, ${e.clientY + 15}px)`;
-        clown.style.opacity = '1';
-
-        clearTimeout(fadeTimeout);
-
-        fadeTimeout = setTimeout(() => {
-            clown.style.opacity = '0';
-        }, 300); 
-    });
-})();
-
-
 let backup_icon;
 let backup_name;
 function setCloak(name, icon) {
@@ -388,3 +320,87 @@ function getCookie(cname) {
 	}
 }
 
+(function() {
+    // ==========================================
+    // East Coast (EDT) Unix Time Check for 2026
+    // ==========================================
+    
+    // Start: Wed, April 1, 2026 12:00:00 AM EDT (1775016000000 ms)
+    const startAprilFools = 1775016000000; 
+    
+    // End: Wed, April 1, 2026 11:59:59 PM EDT (1775102399999 ms)
+    const endAprilFools = 1775102399999;
+    
+    // Get current Unix timestamp
+    const now = Date.now();
+
+    // If current time is outside this window, exit completely
+    if (now < startAprilFools || now > endAprilFools) return;
+
+    // ==========================================
+    // Prank Logic
+    // ==========================================
+    
+    function initPrank() {
+        // Failsafe: if the body still isn't ready, wait a frame and try again
+        if (!document.body) {
+            requestAnimationFrame(initPrank);
+            return;
+        }
+
+        // --- 1. The 10-Second Page Tilt ---
+        
+        document.body.style.transition = "transform 2s ease-in-out";
+        document.body.style.transformOrigin = "center center";
+        
+        document.body.style.transform = "rotate(3deg)";
+
+        setTimeout(() => {
+            if (document.body) {
+                document.body.style.transform = "rotate(0deg)";
+            }
+        }, 10000);
+
+        // --- 2. The Fading Clown Cursor Trail ---
+        
+        const clown = document.createElement('div');
+        clown.innerText = '🤡';
+        
+        Object.assign(clown.style, {
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            pointerEvents: 'none',
+            fontSize: '2rem',
+            zIndex: '2147483647', // Max z-index
+            opacity: '0',
+            transition: 'opacity 0.4s ease, transform 0.05s linear',
+            userSelect: 'none'
+        });
+        
+        document.body.appendChild(clown);
+
+        let fadeTimeout;
+
+        document.addEventListener('mousemove', (e) => {
+            clown.style.transform = `translate(${e.clientX + 15}px, ${e.clientY + 15}px)`;
+            clown.style.opacity = '1';
+
+            clearTimeout(fadeTimeout);
+
+            fadeTimeout = setTimeout(() => {
+                clown.style.opacity = '0';
+            }, 300); 
+        });
+    }
+
+    // ==========================================
+    // Initialization: Wait for the DOM
+    // ==========================================
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initPrank);
+    } else {
+        initPrank();
+    }
+})();
