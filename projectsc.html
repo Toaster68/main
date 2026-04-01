@@ -13,58 +13,77 @@
   <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_high_contrast/bundles/react_todo_sidebar-df089b77a5.css">
 
   <style>
-    /* Ensure the body takes up the full screen height */
     body {
       margin: 0;
       background: #f5f5f5;
       font-family: "Lato", sans-serif;
     }
 
-    /* Global Left Navigation */
+    /* =========================================================
+       GLOBAL NAV (Left Sidebar - Collapsed Icon Only View)
+       ========================================================= */
     .ic-app-header {
       position: fixed;
       left: 0;
       top: 0;
-      width: 84px;
+      width: 54px; /* Canvas Collapsed Width */
       height: 100vh;
       background-color: #394B58;
       z-index: 100;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 20px;
+      padding-top: 15px;
     }
 
     .ic-app-header__menu-list-item {
       width: 100%;
-      text-align: center;
-      margin-bottom: 20px;
+      height: 54px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       color: white;
       cursor: pointer;
       text-decoration: none;
-      font-size: 12px;
+      box-sizing: border-box;
+      border-left: 4px solid transparent;
     }
 
     .ic-app-header__menu-list-item svg {
       fill: white;
-      width: 30px;
-      height: 30px;
-      margin-bottom: 5px;
+      width: 26px;
+      height: 26px;
     }
 
+    /* Active Dashboard Icon */
     .ic-app-header__menu-list-item--active {
       background: #fff;
-      color: #0A5A9E;
-      border-left: 4px solid #0A5A9E;
-      padding: 10px 0;
+      border-left: none;
+      border-right: 4px solid #0A5A9E; /* Mirrored border logic */
     }
     .ic-app-header__menu-list-item--active svg {
       fill: #0A5A9E;
     }
 
-    /* Main Content Wrapper */
+    /* Square Avatar per your request */
+    .ic-avatar-square {
+      width: 32px;
+      height: 32px;
+      background: #fff;
+      margin: 0 auto;
+      border-radius: 0; /* No rounded corners */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      color: #394B58;
+    }
+
+    /* =========================================================
+       MAIN LAYOUT & 3-COLUMN GRID
+       ========================================================= */
     .ic-Layout-wrapper {
-      margin-left: 84px; /* Clears the fixed left sidebar */
+      margin-left: 54px; /* Clears the collapsed left sidebar */
       display: flex;
       min-height: 100vh;
     }
@@ -78,20 +97,102 @@
 
     .ic-Layout-contentMain {
       flex: 1;
+      min-width: 0;
     }
 
-    /* Right Sidebar (To Do List) */
+    .ic-Dashboard-header__title {
+      font-size: 24px;
+      font-weight: normal;
+      margin-top: 0;
+      margin-bottom: 24px;
+      color: #273540;
+    }
+
+    /* Force games container into exactly 3 columns */
+    #games {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 30px !important;
+    }
+
+    .ic-DashboardCard {
+      background: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.2s;
+    }
+
+    .ic-DashboardCard:hover {
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    }
+
+    /* =========================================================
+       INLINE GAME VIEWER (Replaces cards, keeps sidebars)
+       ========================================================= */
+    #gameViewerContainer {
+      display: none;
+      width: 100%;
+      height: calc(100vh - 80px);
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-direction: column;
+    }
+
+    .game-viewer-toolbar {
+      background: #fff;
+      padding: 10px 15px;
+      display: flex;
+      justify-content: space-between;
+      color: #273540;
+      align-items: center;
+      border-bottom: 1px solid #c7cdd1;
+    }
+
+    .game-viewer-toolbar button {
+      background: #f5f5f5;
+      color: #273540;
+      border: 1px solid #c7cdd1;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .game-viewer-toolbar button:hover { background: #e8eaec; }
+
+    /* The div that games.js injects the iframe into */
+    #gameViewer {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    #gameViewer iframe {
+      flex: 1;
+      width: 100%;
+      border: none;
+      background: #000;
+    }
+
+    /* =========================================================
+       RIGHT SIDEBAR (To Do List)
+       ========================================================= */
     .ic-app-main-content__secondary {
-      width: 300px;
+      width: 280px;
       flex-shrink: 0;
     }
 
     .todo-header {
-      font-size: 18px;
-      font-weight: bold;
+      font-size: 1.125rem;
+      font-weight: 700;
       border-bottom: 1px solid #c7cdd1;
       padding-bottom: 8px;
       margin-bottom: 16px;
+      color: #273540;
     }
 
     .todo-item {
@@ -101,10 +202,11 @@
     }
 
     .todo-item svg {
-      fill: #0A5A9E;
-      width: 20px;
-      height: 20px;
+      fill: #3e5466;
+      width: 16px;
+      height: 16px;
       margin-right: 12px;
+      margin-top: 2px;
     }
 
     .todo-item-details {
@@ -112,82 +214,29 @@
     }
 
     .todo-item-title {
-      color: #0A5A9E;
+      color: #273540;
       font-weight: bold;
       margin-bottom: 4px;
+      font-size: 0.875rem;
     }
 
     .todo-item-course, .todo-item-due {
-      color: #556572;
-      font-size: 12px;
-    }
-
-    /* Games Dashboard Grid */
-    .ic-Dashboard-header__title {
-      font-size: 24px;
-      font-weight: normal;
-      margin-bottom: 24px;
-      color: #273540;
-    }
-
-    .ic-DashboardCard__box__container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr); /* Enforces the 3-card wide layout */
-      gap: 30px;
-    }
-
-    /* Game Viewer (Hidden by default, overlays cards when active) */
-    #gameViewerContainer {
-      display: none;
-      width: 100%;
-      height: calc(100vh - 100px);
-      background: #000;
-      border-radius: 8px;
-      overflow: hidden;
-      flex-direction: column;
-    }
-
-    .game-viewer-toolbar {
-      background: #394B58;
-      padding: 10px 15px;
-      display: flex;
-      justify-content: space-between;
-      color: white;
-      align-items: center;
-    }
-
-    .game-viewer-toolbar button {
-      background: #fff;
-      color: #394B58;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    #gameFrame {
-      flex: 1;
-      border: none;
-      width: 100%;
-      background: black;
+      color: #4a5b68;
+      font-size: 0.75rem;
     }
   </style>
 </head>
 <body>
 
   <nav class="ic-app-header">
-    <a href="#" class="ic-app-header__menu-list-item">
-      <div style="width:40px;height:40px;background:#fff;border-radius:50%;margin:0 auto 5px;"></div>
-      Account
+    <a href="#" class="ic-app-header__menu-list-item" title="Account">
+      <div class="ic-avatar-square">S</div>
     </a>
-    <a href="#" class="ic-app-header__menu-list-item ic-app-header__menu-list-item--active">
+    <a href="#" class="ic-app-header__menu-list-item ic-app-header__menu-list-item--active" title="Dashboard">
       <svg viewBox="0 0 280 200"><path d="M273 180H197V164h62A122 122 0 1 0 17 142a124 124 0 0 0 2 22H90v16H6l-1-6A138 138 0 0 1 1 142C1 65 63 3 140 3S278 65 278 142a137 137 0 0 1-3 32Z"/></svg>
-      Dashboard
     </a>
-    <a href="#" class="ic-app-header__menu-list-item">
+    <a href="#" class="ic-app-header__menu-list-item" title="Courses">
       <svg viewBox="0 0 280 259"><path d="M73 198c-11 0-22 8-24 18a26 26 0 0 0 0 3v1a22 22 0 0 0 5 14 22 22 0 0 0 17 8H200V228H66V213H200V198ZM94 92h90V62H94ZM79 107V46H200v60ZM86 137V122H192v15ZM207 167v-15H86v15ZM86 167ZM65 152V46H64c0-7 6-14 14-14H214V212H73a38 38 0 0 0-8 0ZM36 31h0A14 14 0 0 0 22 45v167a22 22 0 0 1 14-5V31Z"/></svg>
-      Courses
     </a>
   </nav>
 
@@ -197,18 +246,18 @@
       <main class="ic-Layout-contentMain">
         <h1 class="ic-Dashboard-header__title" id="dashboardTitle">Dashboard</h1>
 
-        <div class="ic-DashboardCard__box__container" id="gamesContainer">
+        <div id="games">
           </div>
 
         <div id="gameViewerContainer">
           <div class="game-viewer-toolbar">
-            <span id="gameViewerTitle">Loading Game...</span>
+            <span id="gameViewerTitle" style="font-size: 1.25rem; font-weight: bold;">Loading Game...</span>
             <div>
                <button onclick="document.getElementById('gameFrame').requestFullscreen()">Fullscreen</button>
-               <button onclick="closeGameViewer()">Close Game</button>
+               <button onclick="closeDashboardGame()">Close Game</button>
             </div>
           </div>
-          <iframe id="gameFrame" allowfullscreen></iframe>
+          <div id="gameViewer"></div>
         </div>
       </main>
 
@@ -240,64 +289,71 @@
   <script src="games.js"></script>
 
   <script>
-    // Overriding the display logic from your games.js to format as Canvas Cards
-    function renderCanvasCards() {
-      const container = document.getElementById('gamesContainer');
-      container.innerHTML = ''; 
-
-      // Fallback if gamelist isn't loaded yet from games.js
-      if (!window.gamelist || window.gamelist.length === 0) {
-        setTimeout(renderCanvasCards, 500);
+    // Store original functions from games.js
+    const coreOpenGame = window.openGame;
+    
+    // Override how the games are generated to inject Canvas Card styles
+    window.displayGames = function(games) {
+      const container = document.getElementById('games');
+      container.innerHTML = "";
+      
+      if (!games || games.length === 0) {
+        container.innerHTML = "<p>No games found.</p>";
         return;
       }
 
-      window.gamelist.forEach(game => {
-        // Build image URL using your provided CDN replacements
-        const coverURL = "https://cdn.jsdelivr.net/gh/Toaster68/covers2@main";
-        let imgSrc = game.cover ? game.cover.replace('{COVER_URL}', coverURL) : '';
-        let gameAuthor = game.author || game.dev || 'Unknown Author';
+      games.forEach((game) => {
+        // Parse the image URL the same way games.js does
+        let imgSrc = game.cover ? game.cover.replace("{COVER_URL}", "https://cdn.jsdelivr.net/gh/Toaster68/covers2@main").replace("{HTML_URL}", "https://cdn.jsdelivr.net/gh/Toaster68/html2@main") : '';
+        let gameAuthor = game.author || game.dev || 'Sodalite Games';
 
-        // Create the Canvas Card HTML
-        const card = document.createElement('div');
-        card.className = 'ic-DashboardCard';
+        // Create standard Canvas Card Element
+        const card = document.createElement("div");
+        card.className = "ic-DashboardCard";
         card.innerHTML = `
           <div class="ic-DashboardCard__header" style="height: 146px; background-image: url('${imgSrc}'); background-size: cover; background-position: center;">
           </div>
           <div style="padding: 15px;">
-            <div style="font-weight: bold; font-size: 16px; color: #0A5A9E; margin-bottom: 5px;">${game.name}</div>
-            <div style="font-size: 12px; color: #556572;">${gameAuthor}</div>
+            <div style="font-weight: bold; font-size: 0.875rem; color: #0A5A9E; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${game.name}</div>
+            <div style="font-size: 0.75rem; color: #4a5b68;">${gameAuthor}</div>
           </div>
         `;
-
-        // Click event to hide cards and show the game viewer
-        card.addEventListener('click', () => {
-          document.getElementById('gamesContainer').style.display = 'none';
+        
+        // Custom Click Event
+        card.onclick = () => {
+          // Hide Dashboard Grid
+          document.getElementById('games').style.display = 'none';
           document.getElementById('dashboardTitle').style.display = 'none';
           
-          const viewer = document.getElementById('gameViewerContainer');
-          viewer.style.display = 'flex';
-          
+          // Show the new inline player wrapper
+          const viewerContainer = document.getElementById('gameViewerContainer');
+          viewerContainer.style.display = 'flex';
           document.getElementById('gameViewerTitle').innerText = game.name;
           
-          const htmlURL = "https://cdn.jsdelivr.net/gh/Toaster68/html2@main";
-          document.getElementById('gameFrame').src = game.html.replace('{HTML_URL}', htmlURL);
-        });
+          // Let games.js do its standard iframe loading magic into #gameViewer
+          if (typeof coreOpenGame === 'function') {
+            coreOpenGame(game);
+          }
+        };
 
         container.appendChild(card);
       });
-    }
+    };
 
-    // Function to handle closing the game and returning to the dashboard grid
-    function closeGameViewer() {
+    // UI Handle to close the game and return to the grid safely
+    window.closeDashboardGame = function() {
+      // Hide Player
       document.getElementById('gameViewerContainer').style.display = 'none';
-      document.getElementById('gameFrame').src = '';
       
-      document.getElementById('gamesContainer').style.display = 'grid';
+      // Call games.js core close function if it exists to cleanup URLs/iframes
+      if (typeof window.closeGame === 'function') {
+        window.closeGame(); 
+      }
+      
+      // Restore Grid
+      document.getElementById('games').style.display = 'grid';
       document.getElementById('dashboardTitle').style.display = 'block';
-    }
-
-    // Run the rendering function once the DOM is loaded
-    document.addEventListener('DOMContentLoaded', renderCanvasCards);
+    };
   </script>
 
 </body>
