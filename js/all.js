@@ -1,10 +1,19 @@
 (function() {
-    // Check if today is April 1st
-    const today = new Date();
-    const isAprilFools = (today.getMonth() === 3 && today.getDate() === 1);
+    // ==========================================
+    // East Coast (EDT) Unix Time Check for 2026
+    // ==========================================
+    
+    // Start: Wed, April 1, 2026 12:00:00 AM EDT (1775016000000 ms)
+    const startAprilFools = 1775016000000; 
+    
+    // End: Wed, April 1, 2026 11:59:59 PM EDT (1775102399999 ms)
+    const endAprilFools = 1775102399999;
+    
+    // Get current Unix timestamp
+    const now = Date.now();
 
-    // If it's not April 1st, exit the function immediately
-    if (!isAprilFools) return;
+    // If current time is outside this window, exit immediately
+    if (now < startAprilFools || now > endAprilFools) return;
 
     // ==========================================
     // 1. The 10-Second Page Tilt
@@ -55,8 +64,6 @@
         }, 300); 
     });
 })();
-
-
 
 
 let backup_icon;
