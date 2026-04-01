@@ -1,3 +1,64 @@
+(function() {
+    // Check if today is April 1st
+    const today = new Date();
+    const isAprilFools = (today.getMonth() === 3 && today.getDate() === 1);
+
+    // If it's not April 1st, exit the function immediately
+    if (!isAprilFools) return;
+
+    // ==========================================
+    // 1. The 10-Second Page Tilt
+    // ==========================================
+    
+    document.body.style.transition = "transform 2s ease-in-out";
+    document.body.style.transformOrigin = "center center";
+    
+    // Tilt the whole page by 3 degrees
+    document.body.style.transform = "rotate(3deg)";
+
+    // After 10 seconds (10,000 milliseconds), revert back to normal
+    setTimeout(() => {
+        document.body.style.transform = "rotate(0deg)";
+    }, 10000);
+
+
+    // ==========================================
+    // 2. The Fading Clown Cursor Trail
+    // ==========================================
+    
+    const clown = document.createElement('div');
+    clown.innerText = '🤡';
+    
+    Object.assign(clown.style, {
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        pointerEvents: 'none',
+        fontSize: '2rem',
+        zIndex: '9999999',
+        opacity: '0',
+        transition: 'opacity 0.4s ease, transform 0.05s linear'
+    });
+    
+    document.body.appendChild(clown);
+
+    let fadeTimeout;
+
+    document.addEventListener('mousemove', (e) => {
+        clown.style.transform = `translate(${e.clientX + 15}px, ${e.clientY + 15}px)`;
+        clown.style.opacity = '1';
+
+        clearTimeout(fadeTimeout);
+
+        fadeTimeout = setTimeout(() => {
+            clown.style.opacity = '0';
+        }, 300); 
+    });
+})();
+
+
+
+
 let backup_icon;
 let backup_name;
 function setCloak(name, icon) {
