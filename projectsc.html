@@ -7,9 +7,6 @@
   <title>Games | Dashboard</title>
   <link rel="icon" href="/favicon.ico" />
 
-  <!-- ======================================================
-       Canvas LMS CDN CSS (sourced directly from your MHTML)
-       ====================================================== -->
   <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/no_variables/bundles/fonts-eb4a10fb18.css" media="screen">
   <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/default/variables-high_contrast-9dec371ad57e3dd0396f0b2eddb63479.css" media="all">
   <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_high_contrast/bundles/common-a6bc767612.css" media="screen">
@@ -17,14 +14,9 @@
   <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_high_contrast/bundles/dashboard-caec3b50bb.css" media="screen">
   <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_high_contrast/bundles/react_todo_sidebar-df089b77a5.css" media="screen">
 
-  <!-- Existing site styles (scoped — used only by #gameViewer) -->
-  <link rel="stylesheet" href="/style.css" />
-  <link rel="stylesheet" href="/themes.css" />
-
   <style>
     /* =========================================================
        CANVAS VARIABLE FALLBACKS
-       (in case CDN variables sheet doesn't load)
        ========================================================= */
     :root {
       --ic-brand-primary: #0A5A9E;
@@ -32,16 +24,17 @@
       --ic-link-color: #09508C;
       --ic-brand-button--primary-bgd: #0A5A9E;
       --ic-brand-button--primary-text: #ffffff;
-      --ic-brand-global-nav-bgd: #334451;
-      --ic-brand-global-nav-ic-icon-svg-fill: #ffffff;
-      --ic-brand-global-nav-ic-icon-svg-fill--active: var(--ic-brand-primary);
-      --ic-brand-global-nav-menu-item__text-color: #ffffff;
-      --ic-brand-global-nav-menu-item__text-color--active: #09508C;
+      
+      /* Fixed: White background for global nav, dark text to match */
+      --ic-brand-global-nav-bgd: #ffffff;
+      --ic-brand-global-nav-ic-icon-svg-fill: #273540;
+      --ic-brand-global-nav-ic-icon-svg-fill--active: #0A5A9E;
+      --ic-brand-global-nav-menu-item__text-color: #273540;
+      --ic-brand-global-nav-menu-item__text-color--active: #0A5A9E;
     }
 
     /* =========================================================
        CANVAS GLOBAL NAV (left sidebar)
-       Extracted from MHTML CID CSS parts
        ========================================================= */
     .ic-app-header {
       box-sizing: border-box;
@@ -54,6 +47,8 @@
       width: 54px;
       z-index: 100;
       background-color: var(--ic-brand-global-nav-bgd);
+      border-right: 1px solid #e8eaec; /* explicit boundary for white bg */
+      border-radius: 0 !important; /* Fixed: No rounded corners */
     }
     .ic-app-header__main-navigation {
       box-sizing: border-box;
@@ -87,10 +82,11 @@
       height: 1.625rem;
     }
     .ic-app-header__menu-list-item.ic-app-header__menu-list-item--active .ic-app-header__menu-list-link {
-      background: #ffffff;
+      background: #f5f5f5; /* Slight contrast over white */
+      border-right: 3px solid var(--ic-brand-primary); /* Fixed: Mirrored active indicator */
     }
     .ic-app-header__menu-list-item.ic-app-header__menu-list-item--active .ic-icon-svg {
-      fill: var(--ic-brand-primary);
+      fill: var(--ic-brand-global-nav-ic-icon-svg-fill--active);
     }
     .ic-app-header__menu-list-item.ic-app-header__menu-list-item--active .menu-item-icon-container {
       color: var(--ic-brand-primary);
@@ -105,13 +101,14 @@
       text-align: center;
       display: block;
       color: var(--ic-brand-global-nav-menu-item__text-color);
+      border-radius: 0 !important; /* Ensure square look */
       border-style: none;
       padding: 0.4375rem 0;
       text-decoration: none;
     }
     .ic-app-header__menu-list-link:hover,
     .ic-app-header__menu-list-link:focus {
-      background-color: rgba(0, 0, 0, 0.2);
+      background-color: rgba(0, 0, 0, 0.05);
     }
     .menu-item-icon-container {
       position: relative;
@@ -127,12 +124,6 @@
     .ic-icon-svg {
       fill: var(--ic-brand-global-nav-ic-icon-svg-fill);
     }
-    .ic-app-header__menu-list-item.ic-app-header__menu-list-item--active .ic-icon-svg {
-      fill: var(--ic-brand-global-nav-ic-icon-svg-fill--active);
-    }
-    .menu-item__badge {
-      display: none; /* badges not needed for our nav */
-    }
     .menu-item__text {
       display: block;
       font-size: 0.5625rem;
@@ -145,25 +136,26 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    /* Avatar for profile item */
+    
+    /* Fixed: Avatar for profile item - removed 50% border radius */
     .ic-avatar {
-      border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.5);
+      border-radius: 0;
+      border: 2px solid #273540;
       width: 36px;
       height: 36px;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #555;
+      background: transparent;
       font-size: 1rem;
-      color: #fff;
+      color: #273540;
       font-weight: bold;
       margin: 0 auto;
     }
 
     /* =========================================================
-       CANVAS LAYOUT (extracted from common CSS)
+       CANVAS LAYOUT
        ========================================================= */
     html, body {
       height: 100%;
@@ -190,20 +182,11 @@
       flex: 1 0 auto;
       min-width: 1px;
     }
-    .ic-Layout-watermark {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      z-index: -1;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-    }
     .ic-app-main-content {
       box-sizing: border-box;
       flex: 1 1 0%;
       min-width: 1px;
-      display: flex; /* side-by-side: content + sidebar */
+      display: flex;
     }
     .ic-Layout-contentWrapper {
       box-sizing: border-box;
@@ -217,15 +200,14 @@
     .ic-app-main-content__secondary {
       box-sizing: border-box;
       min-width: 1px;
-      padding: 24px 24px 24px 24px;
+      padding: 24px;
       position: relative;
       width: 288px;
       flex-shrink: 0;
     }
 
     /* =========================================================
-       CANVAS DASHBOARD HEADER
-       (from dashboard.css, extracted from MHTML)
+       CANVAS DASHBOARD HEADER & CARDS
        ========================================================= */
     .ic-dashboard-app {
       margin-top: -24px;
@@ -263,29 +245,31 @@
       gap: 12px;
     }
 
-    /* =========================================================
-       CANVAS DASHBOARD CARDS
-       (all from dashboard_card.css – included via CDN above,
-       these are just inline fallbacks for key rules)
-       ========================================================= */
     .ic-DashboardCard__box {
       padding: 24px 0.125rem 0;
     }
+    
+    /* Fixed: 3-cards-across layout utilizing CSS Grid */
     .ic-DashboardCard__box__container {
-      margin: -36px 0 0 -36px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 36px;
+      margin: 0; 
     }
+    
     .ic-DashboardCard {
       box-sizing: border-box;
       box-shadow: rgba(0,0,0,0.3) 0 2px 5px;
       border-radius: 4px;
       overflow: hidden;
       background: #fff;
-      width: 262px;
-      display: inline-block;
-      vertical-align: top;
-      margin: 36px 0 0 36px;
+      width: 100%; /* controlled cleanly by grid width now */
+      display: flex;
+      flex-direction: column;
+      margin: 0;
       cursor: pointer;
     }
+    
     .ic-DashboardCard:hover {
       box-shadow: rgba(0,0,0,0.35) 0 4px 10px;
     }
@@ -348,7 +332,7 @@
       display: flex;
       align-items: flex-end;
       padding: 0 0 12px;
-      margin-top: 9px;
+      margin-top: auto;
       height: 2.5rem;
     }
     .ic-DashboardCard__action {
@@ -362,26 +346,6 @@
     .ic-DashboardCard__action:hover {
       color: var(--ic-brand-primary);
     }
-    .ic-DashboardCard__action-layout {
-      position: relative;
-      font-size: 24px;
-    }
-    .ic-DashboardCard__header-button {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 1.25rem;
-    }
     .ic-DashboardCard__header-button-bg {
       position: absolute;
       top: 12px;
@@ -393,7 +357,6 @@
 
     /* =========================================================
        CANVAS TODO SIDEBAR
-       (from react_todo_sidebar.css + common)
        ========================================================= */
     .todo-list-header {
       font-size: 1.5rem;
@@ -447,10 +410,6 @@
       color: #666;
       margin-top: 2px;
     }
-    .ToDoSidebarItem__Close {
-      margin-top: 4px;
-      flex-shrink: 0;
-    }
     .canvas-todo-dismiss {
       background: transparent;
       border: none;
@@ -465,7 +424,6 @@
       color: #273540;
     }
 
-    /* Data controls in sidebar */
     .canvas-data-controls {
       margin-top: 24px;
       padding-top: 24px;
@@ -495,88 +453,51 @@
       background: #e8eaec;
     }
 
-    /* Search in dashboard header */
-    #gamesearch {
+    #gamesearch, #sortOptions {
       box-sizing: border-box;
       padding: 6px 12px;
       border: 1px solid #c7cdd1;
       border-radius: 4px;
       font-size: 0.875rem;
-      width: 220px;
       color: #273540;
     }
+    #gamesearch { width: 220px; }
     #gamesearch:focus {
       outline: 2px solid var(--ic-brand-primary);
       outline-offset: 0;
       border-color: var(--ic-brand-primary);
     }
-
-    /* Sort dropdown */
-    #sortOptions {
-      padding: 6px 12px;
-      border: 1px solid #c7cdd1;
-      border-radius: 4px;
-      font-size: 0.875rem;
-      color: #273540;
-      background: #fff;
-    }
-
-    /* Loading state */
+    
     #games.loading-state {
       color: #666;
       padding: 24px;
       font-style: italic;
     }
 
-    /* =========================================================
-       GAME VIEWER (unchanged from original — override nothing here,
-       just ensure it covers the Canvas layout when open)
-       ========================================================= */
-    #gameViewer {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 9999;
-      background: #000;
-      display: none;
-      flex-direction: column;
+    /* Responsive Constraints */
+    @media (max-width: 1024px) {
+      .ic-DashboardCard__box__container {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
-
-    /* =========================================================
-       RESPONSIVE
-       ========================================================= */
     @media (max-width: 768px) {
       body { margin-left: 0; }
       .ic-app-header { display: none; }
       .ic-Layout-contentMain { padding: 12px; }
       .ic-app-main-content__secondary { display: none; }
-      .ic-DashboardCard { width: 100%; margin-left: 0; }
-      .ic-DashboardCard__box__container { margin-left: 0; }
+      .ic-DashboardCard__box__container {
+        grid-template-columns: 1fr;
+      }
     }
 
-    /* Screenreader only */
     .screenreader-only {
-      border: 0;
-      clip: rect(0,0,0,0);
-      height: 1px;
-      margin: -1px;
-      overflow: hidden;
-      padding: 0;
-      position: absolute;
-      width: 1px;
+      border: 0; clip: rect(0,0,0,0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px;
     }
-
-    /* Ellipsis helper */
     .ellipsis {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
   </style>
 
-  <!-- Existing game scripts -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
   <script src="/js/games.js"></script>
@@ -584,16 +505,12 @@
 
 <body class="no-touch">
 
-  <!-- ========================================================
-       CANVAS GLOBAL NAV (left sidebar, 54px wide, fixed)
-       ======================================================== -->
   <header class="ic-app-header no-print" role="banner" aria-label="Global Header">
     <a href="#content" class="screenreader-only">Skip To Content</a>
 
     <div role="region" class="ic-app-header__main-navigation" aria-label="Global Navigation">
       <ul class="ic-app-header__menu-list">
 
-        <!-- Account -->
         <li class="menu-item ic-app-header__menu-list-item">
           <a href="/settings.html" class="ic-app-header__menu-list-link" title="Account">
             <div class="menu-item-icon-container">
@@ -603,7 +520,6 @@
           </a>
         </li>
 
-        <!-- Dashboard (active) -->
         <li class="ic-app-header__menu-list-item ic-app-header__menu-list-item--active" aria-current="page">
           <a id="global_nav_dashboard_link" href="/projects.html" class="ic-app-header__menu-list-link" title="Dashboard">
             <div class="menu-item-icon-container" aria-hidden="true">
@@ -615,7 +531,6 @@
           </a>
         </li>
 
-        <!-- Courses (links to home) -->
         <li class="menu-item ic-app-header__menu-list-item">
           <a id="global_nav_courses_link" href="/home.html" class="ic-app-header__menu-list-link" title="Courses">
             <div class="menu-item-icon-container" aria-hidden="true">
@@ -627,7 +542,6 @@
           </a>
         </li>
 
-        <!-- Calendar (links to blog as placeholder) -->
         <li class="menu-item ic-app-header__menu-list-item">
           <a id="global_nav_calendar_link" href="/blog.html" class="ic-app-header__menu-list-link" title="Calendar">
             <div class="menu-item-icon-container" aria-hidden="true">
@@ -645,7 +559,6 @@
           </a>
         </li>
 
-        <!-- Inbox (links to contact) -->
         <li class="menu-item ic-app-header__menu-list-item">
           <a id="global_nav_conversations_link" href="/contact.html" class="ic-app-header__menu-list-link" title="Inbox">
             <div class="menu-item-icon-container" aria-hidden="true">
@@ -657,7 +570,6 @@
           </a>
         </li>
 
-        <!-- History -->
         <li class="menu-item ic-app-header__menu-list-item">
           <a id="global_nav_history_link" href="/home.html" class="ic-app-header__menu-list-link" title="History">
             <div class="menu-item-icon-container" aria-hidden="true">
@@ -672,7 +584,6 @@
       </ul>
     </div>
 
-    <!-- Secondary nav (help / about at bottom) -->
     <div class="ic-app-header__secondary-navigation">
       <ul class="ic-app-header__menu-list">
         <li class="menu-item ic-app-header__menu-list-item">
@@ -689,24 +600,17 @@
     </div>
   </header>
 
-  <!-- ========================================================
-       MAIN CANVAS LAYOUT
-       ======================================================== -->
   <div id="wrapper" class="ic-Layout-wrapper">
     <div id="main" class="ic-Layout-columns">
-      <div class="ic-Layout-watermark" aria-hidden="true"></div>
 
-      <!-- Main content + sidebar flex container -->
       <div id="not_right_side" class="ic-app-main-content">
 
-        <!-- ── LEFT: primary content ── -->
         <div id="content-wrapper" class="ic-Layout-contentWrapper">
           <div id="content" class="ic-Layout-contentMain" role="main">
 
             <div id="dashboard" class="ic-dashboard-app">
               <h1 class="screenreader-only">Dashboard</h1>
 
-              <!-- Dashboard sticky header -->
               <div id="dashboard_header_container" class="ic-Dashboard-header">
                 <div class="large ic-Dashboard-header__layout">
                   <h2 class="ic-Dashboard-header__title">Dashboard</h2>
@@ -721,7 +625,6 @@
                 </div>
               </div>
 
-              <!-- Cards container — populated by games.js via overridden displayGames() -->
               <div id="DashboardCard_Container" style="display: block;">
                 <div class="ic-DashboardCard__box">
                   <div class="ic-DashboardCard__box__container" id="games">
@@ -729,26 +632,33 @@
                   </div>
                 </div>
               </div>
+              
+              <div id="gameViewer" style="display: none; flex-direction: column; width: 100%; height: calc(100vh - 120px); background: #000; border-radius: 4px; overflow: hidden; margin-top: 12px; box-shadow: rgba(0,0,0,0.3) 0 2px 5px;">
+                <div class="game-header" style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #fff; border-bottom: 1px solid #e8eaec;">
+                  <div class="game-controls">
+                    <button onclick="closeGame()" style="padding: 6px 12px; background: #f5f5f5; border: 1px solid #c7cdd1; border-radius: 4px; cursor: pointer; color: #273540; font-weight: bold;">Back to Dashboard</button>
+                  </div>
+                  <div class="game-title">
+                    <h2 id="gameName" style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #273540;">Game</h2>
+                    <span id="gameId" style="display: none;"></span>
+                  </div>
+                  <div class="game-controls">
+                    <button onclick="document.getElementById('gameFrame').requestFullscreen()" style="padding: 6px 12px; background: #f5f5f5; border: 1px solid #c7cdd1; border-radius: 4px; cursor: pointer; color: #273540; font-weight: bold;">Fullscreen</button>
+                  </div>
+                </div>
+                <iframe id="gameFrame" style="flex: 1; border: none; width: 100%; background: #000;"></iframe>
+              </div>
 
-            </div><!-- /#dashboard -->
-
-          </div><!-- /#content -->
-        </div><!-- /#content-wrapper -->
-
-        <!-- ── RIGHT: sidebar ── -->
-        <div id="right-side-wrapper" class="ic-app-main-content__secondary" style="display: block;">
+            </div></div></div><div id="right-side-wrapper" class="ic-app-main-content__secondary" style="display: block;">
           <aside id="right-side" role="complementary">
 
-            <!-- To Do list -->
             <div class="Sidebar__TodoListContainer">
               <div data-testid="ToDoSidebar">
                 <h2 class="todo-list-header"><span tabindex="-1">To Do</span></h2>
                 <ul dir="ltr" id="planner-todosidebar-item-list">
 
-                  <!-- Todo item 1: Study for Test / AP Gaming -->
                   <li class="canvas-todo-item" id="todo-item-1">
                     <div class="ToDoSidebarItem">
-                      <!-- Assignment icon SVG -->
                       <svg label="Assignment" name="IconAssignment" viewBox="0 0 1920 1920"
                            width="1em" height="1em" aria-hidden="true" role="presentation"
                            class="ToDoSidebarItem__Icon" style="width:1em;height:1em;">
@@ -769,7 +679,6 @@
                     </div>
                   </li>
 
-                  <!-- Todo item 2: Read the textbook / English -->
                   <li class="canvas-todo-item" id="todo-item-2">
                     <div class="ToDoSidebarItem">
                       <svg label="Assignment" name="IconAssignment" viewBox="0 0 1920 1920"
@@ -794,10 +703,7 @@
 
                 </ul>
               </div>
-            </div><!-- /.Sidebar__TodoListContainer -->
-
-            <!-- Data export/import -->
-            <div class="canvas-data-controls">
+            </div><div class="canvas-data-controls">
               <h3>Game Saves</h3>
               <button class="canvas-data-btn" onclick="saveData()">⬇ Export saves</button>
               <button class="canvas-data-btn" onclick="document.getElementById('importData').click()">⬆ Import saves</button>
@@ -805,40 +711,7 @@
             </div>
 
           </aside>
-        </div><!-- /#right-side-wrapper -->
-
-      </div><!-- /#not_right_side -->
-    </div><!-- /#main -->
-  </div><!-- /#wrapper -->
-
-  <!-- ========================================================
-       GAME VIEWER (original, completely unchanged)
-       ======================================================== -->
-  <div id="gameViewer" style="display: none;">
-    <div class="game-header">
-      <div class="game-controls">
-        <button onclick="closeGame()">Back</button>
-      </div>
-      <div class="game-title">
-        <h2 id="gameName">Game</h2>
-        <span id="gameId" style="display: none;"></span>
-      </div>
-      <div class="game-controls">
-        <button onclick="fullscreenGame()">Fullscreen</button>
-      </div>
-    </div>
-    <iframe id="gameFrame"></iframe>
-  </div>
-
-  <!-- ========================================================
-       DISPLAY OVERRIDE
-       Override displayGames() from games.js to render
-       Canvas ic-DashboardCard elements instead of .game divs.
-       This runs after games.js is parsed; the override is in
-       place before the async fetch callbacks fire.
-       ======================================================== -->
-  <script>
-    // Card accent colors (Canvas palette)
+        </div></div></div></div><script>
     const _canvasCardColors = [
       '#0A5A9E', '#008005', '#E1185C', '#D9005F',
       '#B53E05', '#986C16', '#1C93A8', '#6B00C8',
@@ -850,15 +723,11 @@
       return _canvasCardColors[idx];
     }
 
-    // Play icon SVG (used in action bar)
     const _playSVG = `<svg viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true" fill="currentColor">
       <path d="M8 5v14l11-7z"/>
     </svg>`;
 
-    /**
-     * Override the displayGames function from games.js.
-     * Renders games as Canvas ic-DashboardCard elements.
-     */
+    // Render Canvas UI Cards
     window.displayGames = function(games) {
       const container = document.getElementById('games');
       if (!container) return;
@@ -872,7 +741,6 @@
       games.forEach(function(game) {
         const color = _getCardColor(game.id);
 
-        // Resolve cover URL (same logic as original displayGames)
         const coverURL = 'https://cdn.jsdelivr.net/gh/Toaster68/covers2@main';
         const htmlURL  = 'https://cdn.jsdelivr.net/gh/Toaster68/html2@main';
         let coverSrc = '';
@@ -889,57 +757,62 @@
         card.className = 'ic-DashboardCard';
         card.setAttribute('aria-label', game.name);
         card.setAttribute('data-testid', 'canvas-game-card');
-        card.style.opacity = '1';
 
         card.innerHTML = `
           <div class="ic-DashboardCard__header">
             <span class="screenreader-only">Cover image for ${game.name}</span>
-            <div class="ic-DashboardCard__header_image"
-                 style="background-image: url('${coverSrc}'); height: 146px;">
-              <div class="ic-DashboardCard__header_hero"
-                   aria-hidden="true"
-                   style="background-color: ${color}; opacity: ${coverSrc ? '0' : '1'}; height: 146px;">
-              </div>
+            <div class="ic-DashboardCard__header_image" style="background-image: url('${coverSrc}'); height: 146px;">
+              <div class="ic-DashboardCard__header_hero" aria-hidden="true" style="background-color: ${color}; opacity: ${coverSrc ? '0' : '1'}; height: 146px;"></div>
             </div>
             <div class="ic-DashboardCard__header_content">
-              <h3 class="ic-DashboardCard__header-title ellipsis"
-                  title="${game.name}">
+              <h3 class="ic-DashboardCard__header-title ellipsis" title="${game.name}">
                 <span style="color: ${color};">${game.name}</span>
               </h3>
-              <div class="ic-DashboardCard__header-subtitle ellipsis"
-                   title="${subtitle}">${subtitle}</div>
-              <div class="ic-DashboardCard__header-term ellipsis"
-                   title="Sodalite Games">Sodalite Games</div>
+              <div class="ic-DashboardCard__header-subtitle ellipsis" title="${subtitle}">${subtitle}</div>
+              <div class="ic-DashboardCard__header-term ellipsis" title="Sodalite Games">Sodalite Games</div>
             </div>
             <div>
-              <div class="ic-DashboardCard__header-button-bg"
-                   style="background-color: ${color}; opacity: 1;"></div>
+              <div class="ic-DashboardCard__header-button-bg" style="background-color: ${color}; opacity: 1;"></div>
             </div>
           </div>
-          <nav class="ic-DashboardCard__action-container"
-               aria-label="Actions for ${game.name}">
+          <nav class="ic-DashboardCard__action-container" aria-label="Actions for ${game.name}">
             <span class="ic-DashboardCard__action" title="Play ${game.name}" style="flex: 0 0 100%; font-size: 22px; color: ${color};">
               ${_playSVG}
             </span>
           </nav>
         `;
 
-        // Entire card click opens the game
         card.addEventListener('click', function() {
           openGame(game);
         });
-
         container.appendChild(card);
       });
-
-      // Update count in summary label if it exists
-      const allSummary = document.getElementById('allSummary');
-      if (allSummary) allSummary.textContent = 'All Games (' + games.length + ')';
     };
 
-    // Fix cover: if image fails to load, show color background
+    // Override openGame to prevent global UI sidebars from disappearing
+    window.openGame = function(game) {
+      document.getElementById('dashboard_header_container').style.display = 'none';
+      document.getElementById('DashboardCard_Container').style.display = 'none';
+      
+      const viewer = document.getElementById('gameViewer');
+      viewer.style.display = 'flex';
+      
+      document.getElementById('gameName').textContent = game.name;
+      const htmlURL = 'https://cdn.jsdelivr.net/gh/Toaster68/html2@main';
+      document.getElementById('gameFrame').src = game.html ? game.html.replace('{HTML_URL}', htmlURL) : '';
+    };
+
+    // Override closeGame function
+    window.closeGame = function() {
+      document.getElementById('gameViewer').style.display = 'none';
+      document.getElementById('gameFrame').src = '';
+      
+      document.getElementById('dashboard_header_container').style.display = 'block';
+      document.getElementById('DashboardCard_Container').style.display = 'block';
+    };
+
+    // Handle missing card image loads gracefully
     document.addEventListener('DOMContentLoaded', function() {
-      // Observe card additions and handle broken images
       const observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
           mutation.addedNodes.forEach(function(node) {
@@ -949,8 +822,7 @@
               if (imgDiv && heroDiv) {
                 const bgImg = imgDiv.style.backgroundImage;
                 if (bgImg && bgImg !== 'none' && bgImg !== '') {
-                  // Test image load via a temporary Image element
-                  const url = bgImg.slice(5, -2); // strip url(' and ')
+                  const url = bgImg.slice(5, -2);
                   const img = new Image();
                   img.onload = function() { heroDiv.style.opacity = '0'; };
                   img.onerror = function() {
@@ -965,9 +837,7 @@
         });
       });
       const gamesContainer = document.getElementById('games');
-      if (gamesContainer) {
-        observer.observe(gamesContainer, { childList: true });
-      }
+      if (gamesContainer) observer.observe(gamesContainer, { childList: true });
     });
   </script>
 
