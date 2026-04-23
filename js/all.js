@@ -205,12 +205,6 @@ if (location.hash) {
       if (key === name) return decodeURIComponent(val);
     }
     return null;
-  }
-
-  if (getCookie('name') !== '68') {
-    window.location.replace('/');
-    return;
-  }
 
   history.pushState(null, '', location.href);
   window.addEventListener('popstate', function () {
