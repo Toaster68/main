@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Setup</title>
+    <link rel="icon" href="cellsalive_files/favicon.ico">
+    <!-- Game site CSS (dark theme) -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300&display=swap');
+
+        :root {
+            --bg: #10002b;
+            --textcolor: #e0aaff;
+            --uibg: #240046;
+            --inputbg: #3c096c;
+            --inputborder: #5a189a;
+            --shadow: rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            transition-duration: 0.5s;
+            outline: none;
+            border: none;
+            box-sizing: border-box;
+            text-align: center;
+            font-family: 'Prompt', sans-serif;
+            color: var(--textcolor);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header, footer {
+            background-color: var(--uibg);
+            padding: 0.7rem;
+            width: 100%;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        header {
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 5px 10px var(--uibg);
+        }
+
+        footer {
+            margin-top: auto;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -5px 10px var(--uibg);
+            font-size: 0.9rem;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            gap: 1.5rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        button, .btn-like {
+            cursor: pointer;
+            background-color: var(--inputbg);
+            border: 3px solid var(--inputborder);
+            border-radius: 10px;
+            padding: 0.8rem 1.8rem;
+            margin: 0.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        button:hover, .btn-like:hover {
+            filter: brightness(80%);
+            transform: scale(1.07);
+        }
+
+        .school-choice {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .bookmarkletdiv {
+            width: 280px;
+            background-color: var(--uibg);
+            box-shadow: 0px 0px 5px 5px var(--uibg);
+            padding: 1.2rem;
+            margin: 1rem;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .bookmarkletdiv a {
+            font-size: 2rem;
+            font-weight: bold;
+            text-decoration: none;
+            background: var(--inputbg);
+            border: 2px solid var(--inputborder);
+            border-radius: 10px;
+            padding: 0.5rem 2rem;
+            cursor: grab;
+            display: inline-block;
+        }
+
+        .bookmarkletdiv a:active {
+            cursor: grabbing;
+        }
+
+        .note {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            line-height: 1.3;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h2 style="margin:0;">CELLS alive!</h2>
+    </header>
+
+    <main>
+        <!-- Phase 1: School selection -->
+        <div id="schoolPhase">
+            <h1>Welcome!</h1>
+            <p>Select your school level:</p>
+            <div class="school-choice">
+                <button id="elementaryBtn">Elementary</button>
+                <button id="middleBtn">Middle School</button>
+                <button id="highBtn">High School</button>
+            </div>
+        </div>
+
+        <!-- Phase 2: Bookmarklets (hidden until school selected) -->
+        <div id="bookmarkPhase" class="hidden">
+            <h2>Drag a button to your bookmarks bar</h2>
+            <p>Use it whenever you want to come back.</p>
+            <div style="display:flex; flex-wrap:wrap; justify-content:center;">
+                <div class="bookmarkletdiv">
+                    <a href="javascript:void(window.location.replace(location.origin+'/home.html'))" 
+                       title="Drag to bookmarks bar">cellsalive</a>
+                    <div class="note">Will require searching <strong>games</strong> to access</div>
+                </div>
+                <div class="bookmarkletdiv">
+                    <a href="javascript:void(window.location.replace('https://cdn.jsdelivr.net/gh/placeholder/repo@version/file.svg'))" 
+                       title="Drag to bookmarks bar">JScellsalive</a>
+                    <div class="note">SVG placeholder (replace with your link)</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Game Site – Setup Wizard</p>
+    </footer>
+
+    <script>
+        // Handle school level selection
+        function setSchoolLevel(level) {
+            // Store in a cookie that lasts one year
+            document.cookie = "schoolLevel=" + level + "; path=/; max-age=" + (60*60*24*365);
+            // Hide school phase, show bookmarklets
+            document.getElementById("schoolPhase").classList.add("hidden");
+            document.getElementById("bookmarkPhase").classList.remove("hidden");
+        }
+
+        document.getElementById("elementaryBtn").addEventListener("click", function(){
+            setSchoolLevel("elementary");
+        });
+        document.getElementById("middleBtn").addEventListener("click", function(){
+            setSchoolLevel("middle");
+        });
+        document.getElementById("highBtn").addEventListener("click", function(){
+            setSchoolLevel("high");
+        });
+
+        // Optionally, if the user already has a school cookie, skip to bookmarks
+        window.addEventListener("DOMContentLoaded", function() {
+            var cookies = document.cookie.split('; ');
+            var schoolCookie = cookies.find(c => c.startsWith("schoolLevel="));
+            if (schoolCookie) {
+                document.getElementById("schoolPhase").classList.add("hidden");
+                document.getElementById("bookmarkPhase").classList.remove("hidden");
+            }
+        });
+    </script>
+</body>
+</html>
