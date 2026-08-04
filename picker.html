@@ -95,7 +95,7 @@
         }
 
         .bookmarkletdiv {
-            width: 280px;
+            width: 320px;
             background-color: var(--uibg);
             box-shadow: 0px 0px 5px 5px var(--uibg);
             padding: 1.2rem;
@@ -129,8 +129,8 @@
             border: 2px solid var(--inputborder);
             border-radius: 10px;
             padding: 0.8rem;
-            max-width: 600px;
             width: 100%;
+            max-width: 600px;
             text-align: left;
             overflow-x: auto;
             font-family: 'Courier New', monospace;
@@ -138,6 +138,8 @@
             color: var(--textcolor);
             user-select: all;
             margin: 0 auto;
+            white-space: pre-wrap;
+            word-break: break-all;
         }
     </style>
 </head>
@@ -147,7 +149,6 @@
     </header>
 
     <main>
-        <!-- Phase 1: School selection -->
         <div id="schoolPhase">
             <h1>Welcome!</h1>
             <p>Select your school level:</p>
@@ -158,24 +159,21 @@
             </div>
         </div>
 
-        <!-- Phase 2: Bookmarklets (hidden until school selected) -->
         <div id="bookmarkPhase" class="hidden">
             <h2>Pick one bookmark and stick with it for the year</h2>
             <p>Drag a button to your bookmarks bar, then click Continue below it.</p>
             <div style="display:flex; flex-wrap:wrap; justify-content:center;">
-                <!-- Bookmark 1: cellsalive (dynamic) -->
                 <div class="bookmarkletdiv" id="cellsaliveDiv">
                     <a id="cellsaliveLink" href="#" title="Drag to bookmarks bar">cellsalive</a>
                     <div class="note">Will require searching <strong>games</strong> to access</div>
                     <pre><code id="cellsaliveCode"></code></pre>
                     <button class="continueBtn" data-choice="cellsalive">Continue</button>
                 </div>
-                <!-- Bookmark 2: JScellsalive (dynamic UTM) -->
                 <div class="bookmarkletdiv" id="jscellsaliveDiv">
                     <a id="jscellsaliveLink" href="#" title="Drag to bookmarks bar">JScellsalive</a>
                     <div class="note">Direct access – no password</div>
                     <pre><code id="jscellsaliveCode"></code></pre>
-                    <button class="continueBtn" data-choice="jscellsalive" id="jscellsaliveContinue">Continue</button>
+                    <button class="continueBtn" data-choice="jscellsalive">Continue</button>
                 </div>
             </div>
         </div>
@@ -186,30 +184,23 @@
     </footer>
 
     <script>
-        // --- Helper to get schoolLevel cookie ---
         function getSchoolLevelFromCookie() {
             var cookies = document.cookie.split('; ');
             var c = cookies.find(row => row.startsWith("schoolLevel="));
             return c ? c.split('=')[1] : null;
         }
 
-        // --- Build cellsalive link with UTM (current origin) ---
         function buildCellsaliveLink(level) {
-            return location.origin + "/home.html?utm_school=" + level;
+            return location.origin + "/?utm_school=" + level;
         }
 
-        // --- Build JScellsalive link with UTM ---
         function buildJScellsaliveLink(level) {
-            var base = "https://cdn.jsdelivr.net/gh/placeholder/repo@version/file.svg";
-            return base + "?utm_school=" + level;
+            return "https://cdn.jsdelivr.net/gh/placeholder/repo@version/file.svg?utm_school=" + level;
         }
 
-        // --- Update both bookmarks dynamically ---
         function updateAllLinks() {
             var level = getSchoolLevelFromCookie();
             if (!level) return;
-
-            // cellsalive
             var cellsAliveLink = document.getElementById("cellsaliveLink");
             var cellsAliveCode = document.getElementById("cellsaliveCode");
             if (cellsAliveLink && cellsAliveCode) {
@@ -217,8 +208,6 @@
                 cellsAliveLink.href = url;
                 cellsAliveCode.textContent = url;
             }
-
-            // jscellsalive
             var jsLink = document.getElementById("jscellsaliveLink");
             var jsCode = document.getElementById("jscellsaliveCode");
             if (jsLink && jsCode) {
@@ -228,7 +217,6 @@
             }
         }
 
-        // --- Auto-redirect if a bookmark choice has already been made ---
         (function() {
             var cookies = document.cookie.split('; ');
             var chosen = cookies.find(c => c.startsWith("chosenBookmark="));
@@ -244,7 +232,6 @@
             }
         })();
 
-        // --- School selection ---
         function setSchoolLevel(level) {
             document.cookie = "schoolLevel=" + level + "; path=/; max-age=" + (60*60*24*365);
             updateAllLinks();
@@ -256,7 +243,6 @@
         document.getElementById("middleBtn").addEventListener("click", function(){ setSchoolLevel("middle"); });
         document.getElementById("highBtn").addEventListener("click", function(){ setSchoolLevel("high"); });
 
-        // If user already chose school, skip to bookmark selection
         window.addEventListener("DOMContentLoaded", function() {
             var level = getSchoolLevelFromCookie();
             if (level) {
@@ -266,7 +252,6 @@
             }
         });
 
-        // --- Continue buttons ---
         document.querySelectorAll('.continueBtn').forEach(function(btn) {
             btn.addEventListener('click', function() {
                 var choice = this.getAttribute('data-choice');
