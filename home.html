@@ -27,7 +27,35 @@
     <script src="/js/randomquote.js"></script>
     <link rel="stylesheet" href="/themes.css" />
     <link rel="stylesheet" href="/style.css" />
-    
+    <script>
+(function() {
+  // 1. Try cookie first
+  var cookies = document.cookie.split('; ');
+  var cookie = cookies.find(c => c.startsWith("schoolLevel="));
+  var level = cookie ? cookie.split('=')[1] : null;
+
+  // 2. Fallback to UTM parameter
+  if (!level) {
+    var params = new URLSearchParams(window.location.search);
+    var utm = params.get('utm_school');
+    if (utm) {
+      level = utm;
+      // Persist in cookie for future visits
+      document.cookie = "schoolLevel=" + level + "; path=/; max-age=" + (60*60*24*365);
+    }
+  }
+
+  // 3. Set Clarity tag
+  if (level && window.clarity) {
+    window.clarity("set", "schoolLevel", level);
+  } else if (level) {
+    // Clarity may still be loading – queue the call
+    window.addEventListener("clarity.load", function() {
+      window.clarity("set", "schoolLevel", level);
+    });
+  }
+})();
+</script>
   
     <!-- seo(yes i know i have noindex tags) + other things -->
     <title>Sodalite v2 Beta</title>

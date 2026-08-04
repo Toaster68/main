@@ -68,15 +68,8 @@
             gap: 1.5rem;
         }
 
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        h2 {
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-        }
+        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        h2 { font-size: 1.8rem; margin-bottom: 0.5rem; }
 
         button, .btn-like {
             cursor: pointer;
@@ -89,7 +82,6 @@
             font-weight: 600;
             transition: all 0.3s;
         }
-
         button:hover, .btn-like:hover {
             filter: brightness(80%);
             transform: scale(1.07);
@@ -127,20 +119,10 @@
             display: inline-block;
             color: var(--textcolor);
         }
+        .bookmarkletdiv a:active { cursor: grabbing; }
 
-        .bookmarkletdiv a:active {
-            cursor: grabbing;
-        }
-
-        .note {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            line-height: 1.3;
-        }
-
-        .hidden {
-            display: none !important;
-        }
+        .note { font-size: 0.9rem; opacity: 0.8; line-height: 1.3; }
+        .hidden { display: none !important; }
 
         pre {
             background: var(--uibg);
@@ -181,21 +163,19 @@
             <h2>Pick one bookmark and stick with it for the year</h2>
             <p>Drag a button to your bookmarks bar, then click Continue below it.</p>
             <div style="display:flex; flex-wrap:wrap; justify-content:center;">
-                <!-- Bookmark 1 -->
-                <div class="bookmarkletdiv">
-                    <a href="https://cellsarealive.pages.dev" 
-                       title="Drag to bookmarks bar">cellsalive</a>
+                <!-- Bookmark 1: cellsalive (dynamic) -->
+                <div class="bookmarkletdiv" id="cellsaliveDiv">
+                    <a id="cellsaliveLink" href="#" title="Drag to bookmarks bar">cellsalive</a>
                     <div class="note">Will require searching <strong>games</strong> to access</div>
-                    <pre><code>https://cellsarealive.pages.dev</code></pre>
+                    <pre><code id="cellsaliveCode"></code></pre>
                     <button class="continueBtn" data-choice="cellsalive">Continue</button>
                 </div>
-                <!-- Bookmark 2 -->
-                <div class="bookmarkletdiv">
-                    <a href="https://cdn.jsdelivr.net/gh/placeholder/repo@version/file.svg" 
-                       title="Drag to bookmarks bar">JScellsalive</a>
+                <!-- Bookmark 2: JScellsalive (dynamic UTM) -->
+                <div class="bookmarkletdiv" id="jscellsaliveDiv">
+                    <a id="jscellsaliveLink" href="#" title="Drag to bookmarks bar">JScellsalive</a>
                     <div class="note">Direct access – no password</div>
-                    <pre><code>https://cdn.jsdelivr.net/gh/placeholder/repo@version/file.svg</code></pre>
-                    <button class="continueBtn" data-choice="jscellsalive">Continue</button>
+                    <pre><code id="jscellsaliveCode"></code></pre>
+                    <button class="continueBtn" data-choice="jscellsalive" id="jscellsaliveContinue">Continue</button>
                 </div>
             </div>
         </div>
@@ -206,59 +186,96 @@
     </footer>
 
     <script>
-        // Auto-redirect if a bookmark choice has already been made
+        // --- Helper to get schoolLevel cookie ---
+        function getSchoolLevelFromCookie() {
+            var cookies = document.cookie.split('; ');
+            var c = cookies.find(row => row.startsWith("schoolLevel="));
+            return c ? c.split('=')[1] : null;
+        }
+
+        // --- Build cellsalive link with UTM (current origin) ---
+        function buildCellsaliveLink(level) {
+            return location.origin + "/home.html?utm_school=" + level;
+        }
+
+        // --- Build JScellsalive link with UTM ---
+        function buildJScellsaliveLink(level) {
+            var base = "https://cdn.jsdelivr.net/gh/placeholder/repo@version/file.svg";
+            return base + "?utm_school=" + level;
+        }
+
+        // --- Update both bookmarks dynamically ---
+        function updateAllLinks() {
+            var level = getSchoolLevelFromCookie();
+            if (!level) return;
+
+            // cellsalive
+            var cellsAliveLink = document.getElementById("cellsaliveLink");
+            var cellsAliveCode = document.getElementById("cellsaliveCode");
+            if (cellsAliveLink && cellsAliveCode) {
+                var url = buildCellsaliveLink(level);
+                cellsAliveLink.href = url;
+                cellsAliveCode.textContent = url;
+            }
+
+            // jscellsalive
+            var jsLink = document.getElementById("jscellsaliveLink");
+            var jsCode = document.getElementById("jscellsaliveCode");
+            if (jsLink && jsCode) {
+                var url = buildJScellsaliveLink(level);
+                jsLink.href = url;
+                jsCode.textContent = url;
+            }
+        }
+
+        // --- Auto-redirect if a bookmark choice has already been made ---
         (function() {
             var cookies = document.cookie.split('; ');
-            var bookmarkCookie = cookies.find(c => c.startsWith("chosenBookmark="));
-            if (bookmarkCookie) {
-                var choice = bookmarkCookie.split('=')[1];
+            var chosen = cookies.find(c => c.startsWith("chosenBookmark="));
+            if (chosen) {
+                var choice = chosen.split('=')[1];
+                var level = getSchoolLevelFromCookie() || "unknown";
                 if (choice === "cellsalive") {
-                    window.top.location.href = '/home.html';
+                    window.top.location.href = buildCellsaliveLink(level);
                 } else if (choice === "jscellsalive") {
-                    window.top.location.href = 'https://cdn.jsdelivr.net/gh/placeholder/repo@version/file.svg';
+                    window.top.location.href = buildJScellsaliveLink(level);
                 }
-                return; // stop further execution
+                return;
             }
         })();
 
-        // School level selection
+        // --- School selection ---
         function setSchoolLevel(level) {
             document.cookie = "schoolLevel=" + level + "; path=/; max-age=" + (60*60*24*365);
+            updateAllLinks();
             document.getElementById("schoolPhase").classList.add("hidden");
             document.getElementById("bookmarkPhase").classList.remove("hidden");
         }
 
-        document.getElementById("elementaryBtn").addEventListener("click", function(){
-            setSchoolLevel("elementary");
-        });
-        document.getElementById("middleBtn").addEventListener("click", function(){
-            setSchoolLevel("middle");
-        });
-        document.getElementById("highBtn").addEventListener("click", function(){
-            setSchoolLevel("high");
-        });
+        document.getElementById("elementaryBtn").addEventListener("click", function(){ setSchoolLevel("elementary"); });
+        document.getElementById("middleBtn").addEventListener("click", function(){ setSchoolLevel("middle"); });
+        document.getElementById("highBtn").addEventListener("click", function(){ setSchoolLevel("high"); });
 
         // If user already chose school, skip to bookmark selection
         window.addEventListener("DOMContentLoaded", function() {
-            var cookies = document.cookie.split('; ');
-            var schoolCookie = cookies.find(c => c.startsWith("schoolLevel="));
-            if (schoolCookie) {
+            var level = getSchoolLevelFromCookie();
+            if (level) {
+                updateAllLinks();
                 document.getElementById("schoolPhase").classList.add("hidden");
                 document.getElementById("bookmarkPhase").classList.remove("hidden");
             }
         });
 
-        // Continue buttons
+        // --- Continue buttons ---
         document.querySelectorAll('.continueBtn').forEach(function(btn) {
             btn.addEventListener('click', function() {
                 var choice = this.getAttribute('data-choice');
-                // Set cookie that lasts 1 year
                 document.cookie = "chosenBookmark=" + choice + "; path=/; max-age=" + (60*60*24*365);
-                // Redirect the top window (the about:blank cloak) to the target
+                var level = getSchoolLevelFromCookie() || "unknown";
                 if (choice === "cellsalive") {
-                    window.top.location.href = '/home.html';
+                    window.top.location.href = buildCellsaliveLink(level);
                 } else {
-                    window.top.location.href = 'https://cdn.jsdelivr.net/gh/placeholder/repo@version/file.svg';
+                    window.top.location.href = buildJScellsaliveLink(level);
                 }
             });
         });
