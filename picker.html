@@ -5,17 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quick Setup</title>
     <link rel="icon" href="cellsalive_files/favicon.ico">
-    <!-- Game site CSS (dark theme) -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300&display=swap');
 
         :root {
-            --bg: #10002b;
-            --textcolor: #e0aaff;
-            --uibg: #240046;
-            --inputbg: #3c096c;
-            --inputborder: #5a189a;
-            --shadow: rgba(0, 0, 0, 0.5);
+            --bg: #0c0c0c;
+            --textcolor: #fff;
+            --uibg: #242424;
+            --inputbg: #333333;
+            --inputborder: #444444;
+            --shadow: 2px 2px 5px rgba(255, 255, 255, 0.1);
         }
 
         * {
@@ -126,6 +125,7 @@
             padding: 0.5rem 2rem;
             cursor: grab;
             display: inline-block;
+            color: var(--textcolor);
         }
 
         .bookmarkletdiv a:active {
@@ -140,6 +140,22 @@
 
         .hidden {
             display: none !important;
+        }
+
+        pre {
+            background: var(--uibg);
+            border: 2px solid var(--inputborder);
+            border-radius: 10px;
+            padding: 1rem;
+            max-width: 600px;
+            width: 100%;
+            text-align: left;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--textcolor);
+            user-select: all;
+            margin: 0 auto;
         }
     </style>
 </head>
@@ -166,16 +182,20 @@
             <p>Use it whenever you want to come back.</p>
             <div style="display:flex; flex-wrap:wrap; justify-content:center;">
                 <div class="bookmarkletdiv">
-                    <a href="javascript:void(window.location.replace(location.origin+'/home.html'))" 
+                    <a href="https://cellsarealive.pages.dev" 
                        title="Drag to bookmarks bar">cellsalive</a>
                     <div class="note">Will require searching <strong>games</strong> to access</div>
                 </div>
                 <div class="bookmarkletdiv">
-                    <a href="javascript:void(window.location.replace('https://cdn.jsdelivr.net/gh/placeholder/repo@version/file.svg'))" 
+                    <a href="https://cdn.jsdelivr.net/gh/placeholder/repo@version/file.svg" 
                        title="Drag to bookmarks bar">JScellsalive</a>
-                    <div class="note">SVG placeholder (replace with your link)</div>
+                    <div class="note">Direct access – no password</div>
                 </div>
             </div>
+
+            <p style="margin-top:2rem;">Or copy the links:</p>
+            <pre><code>&lt;a href="https://cellsarealive.pages.dev"&gt;cellsalive&lt;/a&gt;
+&lt;a href="https://cdn.jsdelivr.net/gh/placeholder/repo@version/file.svg"&gt;JScellsalive&lt;/a&gt;</code></pre>
         </div>
     </main>
 
@@ -184,11 +204,8 @@
     </footer>
 
     <script>
-        // Handle school level selection
         function setSchoolLevel(level) {
-            // Store in a cookie that lasts one year
             document.cookie = "schoolLevel=" + level + "; path=/; max-age=" + (60*60*24*365);
-            // Hide school phase, show bookmarklets
             document.getElementById("schoolPhase").classList.add("hidden");
             document.getElementById("bookmarkPhase").classList.remove("hidden");
         }
@@ -203,7 +220,6 @@
             setSchoolLevel("high");
         });
 
-        // Optionally, if the user already has a school cookie, skip to bookmarks
         window.addEventListener("DOMContentLoaded", function() {
             var cookies = document.cookie.split('; ');
             var schoolCookie = cookies.find(c => c.startsWith("schoolLevel="));
