@@ -146,7 +146,7 @@
             background: var(--uibg);
             border: 2px solid var(--inputborder);
             border-radius: 10px;
-            padding: 1rem;
+            padding: 0.8rem;
             max-width: 600px;
             width: 100%;
             text-align: left;
@@ -178,24 +178,26 @@
 
         <!-- Phase 2: Bookmarklets (hidden until school selected) -->
         <div id="bookmarkPhase" class="hidden">
-            <h2>Drag a button to your bookmarks bar</h2>
-            <p>Use it whenever you want to come back.</p>
+            <h2>Pick one bookmark and stick with it for the year</h2>
+            <p>Drag a button to your bookmarks bar, then click Continue below it.</p>
             <div style="display:flex; flex-wrap:wrap; justify-content:center;">
+                <!-- Bookmark 1 -->
                 <div class="bookmarkletdiv">
                     <a href="https://cellsarealive.pages.dev" 
                        title="Drag to bookmarks bar">cellsalive</a>
                     <div class="note">Will require searching <strong>games</strong> to access</div>
+                    <pre><code>https://cellsarealive.pages.dev</code></pre>
+                    <button class="continueBtn" data-choice="cellsalive">Continue</button>
                 </div>
+                <!-- Bookmark 2 -->
                 <div class="bookmarkletdiv">
                     <a href="https://cdn.jsdelivr.net/gh/placeholder/repo@version/file.svg" 
                        title="Drag to bookmarks bar">JScellsalive</a>
                     <div class="note">Direct access – no password</div>
+                    <pre><code>https://cdn.jsdelivr.net/gh/placeholder/repo@version/file.svg</code></pre>
+                    <button class="continueBtn" data-choice="jscellsalive">Continue</button>
                 </div>
             </div>
-
-            <p style="margin-top:2rem;">Or copy the links:</p>
-            <pre><code>&lt;a href="https://cellsarealive.pages.dev"&gt;cellsalive&lt;/a&gt;
-&lt;a href="https://cdn.jsdelivr.net/gh/placeholder/repo@version/file.svg"&gt;JScellsalive&lt;/a&gt;</code></pre>
         </div>
     </main>
 
@@ -204,6 +206,22 @@
     </footer>
 
     <script>
+        // Auto-redirect if a bookmark choice has already been made
+        (function() {
+            var cookies = document.cookie.split('; ');
+            var bookmarkCookie = cookies.find(c => c.startsWith("chosenBookmark="));
+            if (bookmarkCookie) {
+                var choice = bookmarkCookie.split('=')[1];
+                if (choice === "cellsalive") {
+                    window.top.location.href = '/home.html';
+                } else if (choice === "jscellsalive") {
+                    window.top.location.href = 'https://cdn.jsdelivr.net/gh/placeholder/repo@version/file.svg';
+                }
+                return; // stop further execution
+            }
+        })();
+
+        // School level selection
         function setSchoolLevel(level) {
             document.cookie = "schoolLevel=" + level + "; path=/; max-age=" + (60*60*24*365);
             document.getElementById("schoolPhase").classList.add("hidden");
@@ -220,6 +238,7 @@
             setSchoolLevel("high");
         });
 
+        // If user already chose school, skip to bookmark selection
         window.addEventListener("DOMContentLoaded", function() {
             var cookies = document.cookie.split('; ');
             var schoolCookie = cookies.find(c => c.startsWith("schoolLevel="));
@@ -227,6 +246,21 @@
                 document.getElementById("schoolPhase").classList.add("hidden");
                 document.getElementById("bookmarkPhase").classList.remove("hidden");
             }
+        });
+
+        // Continue buttons
+        document.querySelectorAll('.continueBtn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var choice = this.getAttribute('data-choice');
+                // Set cookie that lasts 1 year
+                document.cookie = "chosenBookmark=" + choice + "; path=/; max-age=" + (60*60*24*365);
+                // Redirect the top window (the about:blank cloak) to the target
+                if (choice === "cellsalive") {
+                    window.top.location.href = '/home.html';
+                } else {
+                    window.top.location.href = 'https://cdn.jsdelivr.net/gh/placeholder/repo@version/file.svg';
+                }
+            });
         });
     </script>
 </body>
